@@ -4,3 +4,6 @@
 ## NPM installation configuration
 node_modules
 package-lock.json
+
+## NodeJS
+backend/.env
