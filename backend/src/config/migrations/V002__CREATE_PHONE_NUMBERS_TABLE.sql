@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS phone_numbers(
+    id SERIAL PRIMARY KEY,
+    ddd INT NOT NULL CHECK(LENGTH(CAST(ddd AS VARCHAR)) = 3),
+    phone_number INT NOT NULL CHECK(LENGTH(CAST(phone_number AS VARCHAR)) = 9)
+);
