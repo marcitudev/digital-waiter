@@ -1,0 +1,6 @@
+## Visual Studio Code configurations
+.hintrc
+
+## NPM installation configuration
+node_modules
+package-lock.json
