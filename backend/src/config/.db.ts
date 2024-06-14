@@ -11,4 +11,4 @@ const pool = new Pool({
     port: process.env.DB_PORT
 });
 
-module.exports = pool;
+export default pool;
