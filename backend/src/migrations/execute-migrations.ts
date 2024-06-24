@@ -3,14 +3,13 @@ import * as path from 'path';
 import pool from '../config/db';
 
 const rootPath = __dirname;
-const migrationsPath = path.join(rootPath, 'migrations');
+const migrationsPath = path.join(rootPath, 'scripts');
 
 export async function execute() {
     await createMigrationsSchemaHistoryTable();
 
     const files = fs.readdirSync(migrationsPath);
 
-    // Ordenar os arquivos de migração
     files.sort();
 
     for (const [, file] of files.entries()) {
