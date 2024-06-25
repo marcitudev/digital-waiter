@@ -34,4 +34,8 @@ export class CPF{
 
         return remainder < 2 ? 0 : 11 - remainder;
     }
+
+    get value(): string{
+        return this.cpf;
+    }
 }

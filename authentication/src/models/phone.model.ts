@@ -42,4 +42,8 @@ export class Phone{
         return true;
     }
 
+    get value(): string{
+        return this.number;
+    }
+
 }

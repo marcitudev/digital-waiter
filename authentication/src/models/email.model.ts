@@ -15,4 +15,8 @@ export class Email{
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
     }
+
+    get value(): string{
+        return this.email;
+    }
 }
