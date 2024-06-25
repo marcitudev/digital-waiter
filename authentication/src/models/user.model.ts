@@ -1,10 +1,11 @@
+import { Status } from "../enums/status.enum";
 import { Address } from "./address.model";
 import { CPF } from "./cpf.model";
 import { Email } from "./email.model";
 import { Phone } from "./phone.model";
 
 export class User{
-    id: number;
+    id: number | null;
     firstName: string;
     lastName: string;
     cpf: CPF;
@@ -12,9 +13,10 @@ export class User{
     password: string;
     phone: Phone;
     address: Address;
+    status: Status;
 
     constructor(
-        id: number,
+        id: number | null,
         firstName: string,
         lastName: string,
         cpf: string,
@@ -22,6 +24,7 @@ export class User{
         password: string,
         phone: string,
         address: Address,
+        status: Status
     ){
         this.id = id;
         this.firstName = firstName;
@@ -31,5 +34,6 @@ export class User{
         this.password =  password;
         this.phone = new Phone(phone);
         this.address = address;
+        this.status = status;
     }
 }
