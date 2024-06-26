@@ -1,11 +1,13 @@
 import { ErrorEnum } from "../enums/error.enum";
 
 export class Phone{
+    id: number | null;
     number: string;
 
-    constructor(number: string) {
+    constructor(id: number | null, number: string) {
         if(!this.isValidPhoneNumber(number)) throw new Error(ErrorEnum.INVALID_PHONE_NUMBER);
 
+        this.id = id;
         this.number = number.replace(/\D/g, '');
     }
 
