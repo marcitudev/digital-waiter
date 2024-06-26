@@ -3,7 +3,7 @@ import { GenericRepository } from './generic.repository';
 import { City } from '../models/city.model';
 import stateRepository from './state.repository';
 
-class StateRepository extends GenericRepository<City>{
+class CityRepository extends GenericRepository<City>{
 
     table: string = 'cities';
 
@@ -13,6 +13,10 @@ class StateRepository extends GenericRepository<City>{
 
     async getByName(name: string): Promise<City | null>{
         return this.getByAttributeEqualTo('name', `'${name}'`, this.buildCity);
+    }
+
+    async existsById(id: number): Promise<boolean>{
+        return this.existsByAttributeEqualTo('id', id.toString());
     }
 
     private async buildCity(city: QueryResultRow): Promise<City>{
@@ -26,4 +30,4 @@ class StateRepository extends GenericRepository<City>{
 
 }
 
-export default new StateRepository();
+export default new CityRepository();
