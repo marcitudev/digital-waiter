@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS states(
     id SERIAL PRIMARY KEY,
-    acronym VARCHAR(2) NOT NULL CHECK(LENGTH(acronym) = 2),
-    name VARCHAR(50) NOT NULL CHECK(LENGTH(name) >= 3 AND LENGTH(name) <= 50)
+    acronym VARCHAR(2) UNIQUE NOT NULL CHECK(LENGTH(acronym) = 2),
+    name VARCHAR(50) UNIQUE NOT NULL CHECK(LENGTH(name) >= 3 AND LENGTH(name) <= 50)
 );
 
 INSERT INTO 
