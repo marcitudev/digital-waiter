@@ -10,10 +10,10 @@ export class User{
     lastName: string;
     cpf: CPF;
     email: Email;
-    password: string;
     phone: Phone;
     address: Address;
     status: Status;
+    password: string;
 
     constructor(
         id: number | null,
@@ -21,19 +21,19 @@ export class User{
         lastName: string,
         cpf: string,
         email: string,
-        password: string,
-        phone: string,
+        phone: Phone,
         address: Address,
-        status: Status
+        status: Status,
+        password: string
     ){
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.cpf = new CPF(cpf);
         this.email = new Email(email);
-        this.password =  password;
-        this.phone = new Phone(phone);
+        this.phone = phone;
         this.address = address;
         this.status = status;
+        this.password =  password;
     }
 }
