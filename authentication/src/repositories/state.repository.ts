@@ -4,7 +4,9 @@ import { GenericRepository } from './generic.repository';
 
 class StateRepository extends GenericRepository<State>{
 
-    table: string = 'states';
+    constructor(){
+        super('states');
+    }
 
     async getById(id: number): Promise<State | null>{
         return this.getByAttributeEqualTo('id', id.toString(), this.buildState);

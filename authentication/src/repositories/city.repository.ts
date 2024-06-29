@@ -5,7 +5,9 @@ import stateRepository from './state.repository';
 
 class CityRepository extends GenericRepository<City>{
 
-    table: string = 'cities';
+    constructor(){
+        super('cities');
+    }
 
     async getById(id: number): Promise<City | null>{
         return this.getByAttributeEqualTo('id', id.toString(), this.buildCity);
