@@ -38,6 +38,8 @@ export class Phone{
     }
 
     private isValidNumber(number: string): boolean {
+        if(number.length !== 9) throw new Error(ErrorEnum.INVALID_PHONE_NUMBER);
+        
         const numberWithoutMask = number.replace(/\D/g, '');
         const regex = /^9\d{8}$/;
         if(!regex.test(numberWithoutMask)) return false;
