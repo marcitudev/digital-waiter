@@ -4,8 +4,13 @@ import pool from '../config/db';
 import { Status } from '../enums/status.enum';
 import { ErrorEnum } from '../enums/error.enum';
 import { QueryResultRow } from 'pg';
+import { GenericRepository } from './generic.repository';
 
-class UserRepository {
+class UserRepository extends GenericRepository<UserDTO> {
+
+    constructor(){
+        super('users');
+    }
 
     async create(user: User): Promise<UserDTO>{
         return new Promise<UserDTO>((resolve, reject) => {
@@ -38,6 +43,10 @@ class UserRepository {
                 if(response) resolve(this.buildUser(response.rows[0]));
             });
         });
+    }
+
+    async getById(id: number): Promise<UserDTO | null>{
+        return this.getByAttributeEqualTo('id', id.toString(), this.buildUser);
     }
 
     private buildUser(user: QueryResultRow): UserDTO{
