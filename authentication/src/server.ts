@@ -8,6 +8,8 @@ const route = Router();
 const PORT = 3001;
 
 app.use(route);
+app.use(express.json());
+
 app.use('/users', userController);
 
 app.listen(PORT, () => {
