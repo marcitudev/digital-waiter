@@ -1,11 +1,15 @@
 import { ErrorEnum } from "../enums/error.enum";
+import { StatusCode } from "../enums/status-code.enum";
+import { ValidationException } from "../exceptions/validation.exception";
 
 export class Phone{
     id: number | null;
     number: string;
 
     constructor(id: number | null, number: string) {
-        if(!this.isValidPhoneNumber(number)) throw new Error(ErrorEnum.INVALID_PHONE_NUMBER);
+        if(!this.isValidPhoneNumber(number)) {
+            throw new ValidationException(StatusCode.BAD_REQUEST, ErrorEnum.INVALID_PHONE_NUMBER, 'Invalid phone number format');
+        }
 
         this.id = id;
         this.number = number.replace(/\D/g, '');

@@ -1,11 +1,13 @@
 import { ErrorEnum } from "../enums/error.enum";
+import { StatusCode } from "../enums/status-code.enum";
+import { ValidationException } from "../exceptions/validation.exception";
 
 export class CPF{
     cpf: string;
 
     constructor(cpf: string){
         if(!this.isValidCPF(cpf)){
-            throw new Error(ErrorEnum.INVALID_CPF);
+            throw new ValidationException(StatusCode.BAD_REQUEST, ErrorEnum.INVALID_CPF, 'Invalid CPF format');
         }
 
         this.cpf = cpf.replace(/\D/g, '');
