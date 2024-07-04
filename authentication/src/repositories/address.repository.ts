@@ -3,7 +3,6 @@ import { Address } from '../models/address.model';
 import { GenericRepository } from './generic.repository';
 import cityRepository from './city.repository';
 import pool from '../config/db';
-import { ErrorEnum } from '../enums/error.enum';
 
 class AddressRepository extends GenericRepository<Address>{
 
@@ -21,20 +20,25 @@ class AddressRepository extends GenericRepository<Address>{
             const query = `
                 INSERT INTO adresses(
                     road, 
-                    neighborhood, 
+                    neighbourhood, 
                     city_id, 
                     number
                 )
                 VALUES(
-                    LTRIM(RTRIM('${ road }')), 
-                    LTRIM(RTRIM('${ neighbourhood }')), 
-                    ${ city.id }, 
-                    ${ number ? number : 'NULL' }
+                    $1, $2, $3, $4
                 )
                 RETURNING *
             `
-            pool.query(query, (error, response) => {
-                if(error) reject(ErrorEnum.INVALID_ADDRESS);
+
+            const values = [
+                road.trim(),
+                neighbourhood.trim(),
+                city.id,
+                number
+            ];
+
+            pool.query(query, values, (error, response) => {
+                if(error) reject(error);
                 if(response) resolve(this.buildAddress(response.rows[0]));
             });
         });
