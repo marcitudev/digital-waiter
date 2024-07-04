@@ -1,8 +1,6 @@
 import { UserDTO } from '../dtos/user.dto';
 import { User } from '../models/user.model';
 import pool from '../config/db';
-import { Status } from '../enums/status.enum';
-import { ErrorEnum } from '../enums/error.enum';
 import { QueryResultRow } from 'pg';
 import { GenericRepository } from './generic.repository';
 
@@ -27,26 +25,36 @@ class UserRepository extends GenericRepository<UserDTO> {
                     password
                 )
                 VALUES(
-                    LTRIM(RTRIM('${ firstName }')), 
-                    LTRIM(RTRIM('${ lastName }')), 
-                    '${ cpf.value }', 
-                    '${ email.value }', 
-                    ${ address.id }, 
-                    ${ phone.id },
-                    ${ Status[status] },
-                    pgp_sym_encrypt(LTRIM(RTRIM('${ password }')), '${ process.env.CRYPTO_KEY }'), 
+                    $1, $2, $3, $4, $5, $6, $7, pgp_sym_encrypt($8, $9)
                 )
                 RETURNING *
-            `
-            pool.query(query, (error, response) => {
-                if(error) reject(ErrorEnum.INVALID_USER);
+            `;
+
+            const values = [
+                firstName.trim(),                                         // $1
+                lastName.trim(),                                          // $2
+                cpf.value,                                                // $3
+                email.value,                                              // $4
+                address.id,                                               // $5
+                phone.id,                                                 // $6
+                status,                                                   // $7
+                password.trim(),                                          // $8
+                process.env.CRYPTO_KEY                                    // $9
+            ];
+
+            pool.query(query, values, (error, response) => {
+                if(error) reject(error);
                 if(response) resolve(this.buildUser(response.rows[0]));
             });
         });
     }
 
     async getById(id: number): Promise<UserDTO | null>{
-        return this.getByAttributeEqualTo('id', id.toString(), this.buildUser);
+        return this.getByAttributeEqualTo('id', id, this.buildUser);
+    }
+
+    async existsByCpf(cpf: string): Promise<boolean>{
+        return this.existsByAttributeEqualTo('cpf', cpf);
     }
 
     private buildUser(user: QueryResultRow): UserDTO{
