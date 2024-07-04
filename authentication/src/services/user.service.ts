@@ -17,28 +17,35 @@ import { ValidationException } from '../exceptions/validation.exception';
 class UserService{
     
     async create(user: User): Promise<UserDTO>{
-        await pool.connect();
-
+        const client = await pool.connect();
+        
         try{
-            await pool.query('BEGIN');
+            await client.query('BEGIN');
+            
+            const { firstName, lastName, cpf, address, phone, password } = user;
 
-            const { address, phone } = user;
-            if(!address) throw new ValidationException(StatusCode.NOT_FOUND, ErrorEnum.ADDRESS_NOT_FOUND, 'Address not found');
+            const existsByCpf = await userRepository.existsByCpf(cpf.value);
+
+            if(existsByCpf) throw new ValidationException(StatusCode.BAD_REQUEST, ErrorEnum.CPF_ALREADY_EXISTS, 'CPF already exists');
+            if(!address) throw new ValidationException(StatusCode.BAD_REQUEST, ErrorEnum.INVALID_ADDRESS, 'Invalid address');
             if(!phone) throw new ValidationException(StatusCode.BAD_REQUEST, ErrorEnum.INVALID_PHONE_NUMBER, 'Invalid phone number');
+            if(!firstName) throw new ValidationException(StatusCode.BAD_REQUEST, ErrorEnum.INVALID_FISTNAME, 'Invalid first name');
+            if(!lastName) throw new ValidationException(StatusCode.BAD_REQUEST, ErrorEnum.INVALID_LASTNAME, 'Invalid last name');
+            if(!password) throw new ValidationException(StatusCode.BAD_REQUEST, ErrorEnum.INVALID_PASSWORD, 'Invalid password');
 
             user.address = await addressService.create(address);
             user.phone = await phoneService.create(phone);
 
             const userRegistered: UserDTO = await userRepository.create(user);
 
-            await pool.query('COMMIT');
+            await client.query('COMMIT');
 
             return userRegistered;
         } catch(error) {
-            await pool.query('ROLLBACK');
-            throw new Error(error as string);
+            await client.query('ROLLBACK');
+            throw error;
         } finally {
-            await pool.end();
+            client.release();
         }
     }
 
