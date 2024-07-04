@@ -10,11 +10,11 @@ class PhoneRepository extends GenericRepository<Phone>{
     }
 
     async getById(id: number): Promise<Phone | null>{
-        return this.getByAttributeEqualTo('id', id.toString(), this.buildPhone);
+        return super.getByAttributeEqualTo('id', id.toString(), this.buildPhone);
     }
 
     async existsById(id: number): Promise<boolean>{
-        return this.existsByAttributeEqualTo('id', id.toString());
+        return super.existsByAttributeEqualTo('id', id.toString());
     }
 
     async create(ddd: string, number: string): Promise<Phone>{
@@ -47,7 +47,7 @@ class PhoneRepository extends GenericRepository<Phone>{
         attrMap.set('ddd', ddd);
         attrMap.set('phone_number', number);
 
-        return this.existsByAttributesEqualTo(attrMap);
+        return super.existsByAttributesEqualTo(attrMap);
     }
 
     private async buildPhone(phone: QueryResultRow): Promise<Phone>{

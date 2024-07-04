@@ -11,7 +11,7 @@ class AddressRepository extends GenericRepository<Address>{
     }
 
     async getById(id: number): Promise<Address | null>{
-        return this.getByAttributeEqualTo('id', id.toString(), this.buildAddress);
+        return super.getByAttributeEqualTo('id', id.toString(), this.buildAddress);
     }
 
     async create(address: Address): Promise<Address>{

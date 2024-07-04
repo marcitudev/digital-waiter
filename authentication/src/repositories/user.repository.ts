@@ -50,11 +50,11 @@ class UserRepository extends GenericRepository<UserDTO> {
     }
 
     async getById(id: number): Promise<UserDTO | null>{
-        return this.getByAttributeEqualTo('id', id, this.buildUser);
+        return super.getByAttributeEqualTo('id', id, this.buildUser);
     }
 
     async existsByCpf(cpf: string): Promise<boolean>{
-        return this.existsByAttributeEqualTo('cpf', cpf);
+        return super.existsByAttributeEqualTo('cpf', cpf);
     }
 
     private buildUser(user: QueryResultRow): UserDTO{

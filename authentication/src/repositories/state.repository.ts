@@ -9,15 +9,15 @@ class StateRepository extends GenericRepository<State>{
     }
 
     async getById(id: number): Promise<State | null>{
-        return this.getByAttributeEqualTo('id', id.toString(), this.buildState);
+        return super.getByAttributeEqualTo('id', id.toString(), this.buildState);
     }
 
     async getByAcronym(acronym: string): Promise<State | null>{
-        return this.getByAttributeEqualTo('acronym', `'${acronym}'`, this.buildState);
+        return super.getByAttributeEqualTo('acronym', `'${acronym}'`, this.buildState);
     }
 
     async getByName(name: string): Promise<State | null>{
-        return this.getByAttributeEqualTo('name', `'${name}'`, this.buildState);
+        return super.getByAttributeEqualTo('name', `'${name}'`, this.buildState);
     }
 
     private buildState(state: QueryResultRow): State{
