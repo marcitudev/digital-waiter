@@ -12,12 +12,12 @@ export abstract class GenericRepository<T>{
         this.query =  `SELECT * FROM ${this.table}`;
     }
 
-    protected async getAll(buildObjectFunction: (row: QueryResultRow) => Array<T> | Promise<Array<T>>){
+    protected async getAll(buildObjectFunction: (row: Array<QueryResultRow>) => Array<T> | Promise<Array<T>>): Promise<Array<T>>{
         return new Promise((resolve, reject) => {
             pool.query(this.query, (error, response) => {
                 if(error) reject(error);
                 else if(response.rows.length > 0) resolve(buildObjectFunction(response.rows));
-                else resolve(null);
+                else resolve([]);
             });
         });
     }
