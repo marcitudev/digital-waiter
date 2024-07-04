@@ -12,11 +12,11 @@ export abstract class GenericRepository<T>{
         this.query =  `SELECT * FROM ${this.table}`;
     }
 
-    protected async getAll(buildObjectFunction: (row: Array<QueryResultRow>) => Array<T> | Promise<Array<T>>): Promise<Array<T>>{
+    protected async getAll(buildObjectFunction: (row: QueryResultRow) => T | Promise<T>): Promise<Array<T>>{
         return new Promise((resolve, reject) => {
             pool.query(this.query, (error, response) => {
                 if(error) reject(error);
-                else if(response.rows.length > 0) resolve(buildObjectFunction(response.rows));
+                else if(response.rows.length > 0) resolve(this.buildObjectsFunction(response.rows, buildObjectFunction));
                 else resolve([]);
             });
         });
@@ -85,6 +85,14 @@ export abstract class GenericRepository<T>{
                 resolve(response.rows[0] === 1);
             });
         });
+    }
+
+    private async buildObjectsFunction(rows: Array<QueryResultRow>, buildObjectFunction: (row: QueryResultRow) => T | Promise<T>): Promise<Array<T>>{
+        return Promise.all(
+            rows.map(async row => {
+                return await buildObjectFunction(row);
+            })
+        )
     }
 
 }
