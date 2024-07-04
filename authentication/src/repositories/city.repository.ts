@@ -9,16 +9,20 @@ class CityRepository extends GenericRepository<City>{
         super('cities');
     }
 
+    async getAll(): Promise<Array<City>>{
+        return super.getAll(this.buildCity);
+    }
+
     async getById(id: number): Promise<City | null>{
-        return this.getByAttributeEqualTo('id', id.toString(), this.buildCity);
+        return super.getByAttributeEqualTo('id', id.toString(), this.buildCity);
     }
 
     async getByName(name: string): Promise<City | null>{
-        return this.getByAttributeEqualTo('name', `'${name}'`, this.buildCity);
+        return super.getByAttributeEqualTo('name', `'${name}'`, this.buildCity);
     }
 
     async existsById(id: number): Promise<boolean>{
-        return this.existsByAttributeEqualTo('id', id);
+        return super.existsByAttributeEqualTo('id', id);
     }
 
     private async buildCity(city: QueryResultRow): Promise<City>{
