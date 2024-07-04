@@ -2,7 +2,6 @@ import { QueryResultRow } from 'pg';
 import { GenericRepository } from './generic.repository';
 import { Phone } from '../models/phone.model';
 import pool from '../config/db';
-import { ErrorEnum } from '../enums/error.enum';
 
 class PhoneRepository extends GenericRepository<Phone>{
 
@@ -21,21 +20,34 @@ class PhoneRepository extends GenericRepository<Phone>{
     async create(ddd: string, number: string): Promise<Phone>{
         return new Promise<Phone>((resolve, reject) => {
             const query = `
-                INSERT INTO adresses(
+                INSERT INTO phone_numbers(
                     ddd, 
                     phone_number
                 )
                 VALUES(
-                    ${ ddd }, 
-                    ${ number }
+                    $1, $2
                 )
                 RETURNING *
             `
-            pool.query(query, (error, response) => {
-                if(error) reject(ErrorEnum.INVALID_PHONE_NUMBER);
+
+            const values = [
+                ddd,
+                number
+            ];
+
+            pool.query(query, values, (error, response) => {
+                if(error) reject(error);
                 if(response) resolve(this.buildPhone(response.rows[0]));
             });
         });
+    }
+
+    async existsByDDDAndPhoneNumber(ddd: string, number: string){
+        const attrMap: Map<string, string> = new Map<string, string>();
+        attrMap.set('ddd', ddd);
+        attrMap.set('phone_number', number);
+
+        return this.existsByAttributesEqualTo(attrMap);
     }
 
     private async buildPhone(phone: QueryResultRow): Promise<Phone>{
