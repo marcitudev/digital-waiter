@@ -18,7 +18,7 @@ class CityRepository extends GenericRepository<City>{
     }
 
     async existsById(id: number): Promise<boolean>{
-        return this.existsByAttributeEqualTo('id', id.toString());
+        return this.existsByAttributeEqualTo('id', id);
     }
 
     private async buildCity(city: QueryResultRow): Promise<City>{
