@@ -1,4 +1,4 @@
-import { Size } from "../decorators/size.decorator";
+import { Length } from "../decorators/length.decorator";
 import { Status } from "../enums/status.enum";
 import { Address } from "./address.model";
 import { CPF } from "./cpf.model";
@@ -8,10 +8,10 @@ import { Phone } from "./phone.model";
 export class User{
     id: number | null;
 
-    @Size(3, 255, 'Firstname must be between 3 and 255 characteres')
+    @Length(3, 255, 'Firstname must be between 3 and 255 characteres')
     firstName: string;
 
-    @Size(3, 255, 'Lastname must be between 3 and 255 characteres')
+    @Length(3, 255, 'Lastname must be between 3 and 255 characteres')
     lastName: string;
 
     cpf: CPF;
