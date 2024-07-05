@@ -11,7 +11,7 @@ function Length(min: number, max: number, msg?: string){
 
         const setter = (newValue: string) => {
             if(newValue.length < min || newValue.length > max) {
-                throw new ValidationException(StatusCode.BAD_REQUEST, ErrorEnum.INVALID_LENGTH, msg ? msg : `${target}: Invalid length: ${propertyKey}`);
+                throw new ValidationException(StatusCode.BAD_REQUEST, ErrorEnum.INVALID_LENGTH, msg || `${target}: Invalid length: ${propertyKey}`);
             }
 
             value = newValue;
