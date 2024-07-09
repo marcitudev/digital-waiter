@@ -1,4 +1,4 @@
-import { QueryResultRow } from 'pg';
+import { PoolClient, QueryResultRow } from 'pg';
 import { Address } from '../models/address.model';
 import { GenericRepository } from './generic.repository';
 import cityRepository from './city.repository';
@@ -14,7 +14,7 @@ class AddressRepository extends GenericRepository<Address>{
         return super.getByAttributeEqualTo('id', id.toString(), this.buildAddress);
     }
 
-    async create(address: Address): Promise<Address>{
+    async create(address: Address, client?: PoolClient): Promise<Address>{
         return new Promise<Address>((resolve, reject) => {
             const { road, neighbourhood, city, number } = address;
             const query = `
@@ -37,7 +37,9 @@ class AddressRepository extends GenericRepository<Address>{
                 number
             ];
 
-            pool.query(query, values, (error, response) => {
+            const agentQuery = client || pool;
+
+            agentQuery.query(query, values, (error, response) => {
                 if(error) reject(error);
                 if(response) resolve(this.buildAddress(response.rows[0]));
             });

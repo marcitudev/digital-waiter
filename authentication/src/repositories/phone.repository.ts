@@ -1,4 +1,4 @@
-import { QueryResultRow } from 'pg';
+import { PoolClient, QueryResultRow } from 'pg';
 import { GenericRepository } from './generic.repository';
 import { Phone } from '../models/phone.model';
 import pool from '../config/db';
@@ -17,7 +17,7 @@ class PhoneRepository extends GenericRepository<Phone>{
         return super.existsByAttributeEqualTo('id', id.toString());
     }
 
-    async create(ddd: string, number: string): Promise<Phone>{
+    async create(ddd: string, number: string, client?: PoolClient): Promise<Phone>{
         return new Promise<Phone>((resolve, reject) => {
             const query = `
                 INSERT INTO phone_numbers(
@@ -35,7 +35,9 @@ class PhoneRepository extends GenericRepository<Phone>{
                 number
             ];
 
-            pool.query(query, values, (error, response) => {
+            const agentQuery = client || pool;
+
+            agentQuery.query(query, values, (error, response) => {
                 if(error) reject(error);
                 if(response) resolve(this.buildPhone(response.rows[0]));
             });
