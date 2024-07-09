@@ -1,3 +1,4 @@
+import { PoolClient } from 'pg';
 import { ErrorEnum } from '../enums/error.enum';
 import { StatusCode } from '../enums/status-code.enum';
 import { ValidationException } from '../exceptions/validation.exception';
@@ -7,7 +8,13 @@ import cityService from './city.service';
 
 class AddressService{
     
-    async create(address: Address): Promise<Address>{
+    async create(address: Address, client?: PoolClient): Promise<Address>{
+        await this.createValidation(address);
+
+        return addressRepository.create(address, client);
+    }
+
+    private async createValidation(address: Address){
         const { road, neighbourhood, city } = address;
 
         if(!road) throw new ValidationException(StatusCode.BAD_REQUEST, ErrorEnum.INVALID_ROAD, 'Invalid road');
@@ -16,8 +23,6 @@ class AddressService{
 
         const existsCityById = await cityService.existsById(address.city.id);
         if(!existsCityById) throw new ValidationException(StatusCode.NOT_FOUND, ErrorEnum.CITY_NOT_FOUND, 'City not found');
-
-        return addressRepository.create(address);
     }
 
 }

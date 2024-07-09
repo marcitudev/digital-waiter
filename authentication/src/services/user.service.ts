@@ -22,21 +22,24 @@ class UserService{
         try{
             await client.query('BEGIN');
             
-            const { firstName, lastName, cpf, address, phone, password } = user;
+            const { firstName, lastName, cpf, email, address, phone, password } = user;
 
             const existsByCpf = await userRepository.existsByCpf(cpf.value);
-
             if(existsByCpf) throw new ValidationException(StatusCode.BAD_REQUEST, ErrorEnum.CPF_ALREADY_EXISTS, 'CPF already exists');
+            
+            const existsByEmail = await userRepository.existsByEmail(email.value);
+            if(existsByEmail) throw new ValidationException(StatusCode.BAD_REQUEST, ErrorEnum.EMAIL_ALREADY_EXISTS, 'Email already exists');
+
             if(!address) throw new ValidationException(StatusCode.BAD_REQUEST, ErrorEnum.INVALID_ADDRESS, 'Invalid address');
             if(!phone) throw new ValidationException(StatusCode.BAD_REQUEST, ErrorEnum.INVALID_PHONE_NUMBER, 'Invalid phone number');
             if(!firstName) throw new ValidationException(StatusCode.BAD_REQUEST, ErrorEnum.INVALID_FISTNAME, 'Invalid first name');
             if(!lastName) throw new ValidationException(StatusCode.BAD_REQUEST, ErrorEnum.INVALID_LASTNAME, 'Invalid last name');
             if(!password) throw new ValidationException(StatusCode.BAD_REQUEST, ErrorEnum.INVALID_PASSWORD, 'Invalid password');
 
-            user.address = await addressService.create(address);
-            user.phone = await phoneService.create(phone);
+            user.address = await addressService.create(address, client);
+            user.phone = await phoneService.create(phone, client);
 
-            const userRegistered: UserDTO = await userRepository.create(user);
+            const userRegistered: UserDTO = await userRepository.create(user, client);
 
             await client.query('COMMIT');
 
