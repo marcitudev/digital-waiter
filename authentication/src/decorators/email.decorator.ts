@@ -10,11 +10,11 @@ function EmailFormat(msg?: string): PropertyDecorator{
         const getter = () => value;
 
         const setter = (newValue: string) => {
-            if(newValue && typeof newValue !== 'string'){
+            if(newValue !== null && newValue !== undefined && typeof newValue !== 'string'){
                 throw new ValidationException(StatusCode.BAD_REQUEST, ErrorEnum.INVALID_FORMAT, `${ propertyKey.toString() } is not assignable to ${ typeof newValue }`);
             }
 
-            if(newValue && !isValidEmail(newValue)) {
+            if(newValue !== null && newValue !== undefined && !isValidEmail(newValue)) {
                 throw new ValidationException(StatusCode.BAD_REQUEST, ErrorEnum.INVALID_EMAIL, msg || `Invalid email: ${ newValue }`);
             }
 

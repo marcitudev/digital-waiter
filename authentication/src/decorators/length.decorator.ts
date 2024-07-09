@@ -10,7 +10,7 @@ function Length(min: number, max: number, canBeNull: boolean = true, msg?: strin
         const getter = () => value;
 
         const setter = (newValue: string) => {
-            if(newValue !== null && typeof newValue !== 'string'){
+            if(newValue !== null && newValue !== undefined && typeof newValue !== 'string'){
                 throw new ValidationException(StatusCode.BAD_REQUEST, ErrorEnum.INVALID_FORMAT, `${ propertyKey.toString() } is not assignable to ${ typeof newValue }`);
             }
 
@@ -18,7 +18,7 @@ function Length(min: number, max: number, canBeNull: boolean = true, msg?: strin
                 throw new ValidationException(StatusCode.BAD_REQUEST, ErrorEnum.PROPERTY_CANNOT_BE_NULL, msg || `Property cannot be null: ${ propertyKey.toString() }`);
             }
 
-            if(newValue !== null && (newValue.length < min || newValue.length > max)) {
+            if(newValue !== null && newValue !== undefined && (newValue.length < min || newValue.length > max)) {
                 throw new ValidationException(StatusCode.BAD_REQUEST, ErrorEnum.INVALID_LENGTH, msg || `Invalid length: ${ propertyKey.toString() }`);
             }
 

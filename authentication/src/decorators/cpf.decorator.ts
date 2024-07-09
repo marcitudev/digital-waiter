@@ -10,11 +10,11 @@ function CPFFormat(msg?: string): PropertyDecorator{
         const getter = () => value;
 
         const setter = (newValue: string) => {
-            if(newValue && typeof newValue !== 'string'){
+            if(newValue !== null && newValue !== undefined && typeof newValue !== 'string'){
                 throw new ValidationException(StatusCode.BAD_REQUEST, ErrorEnum.INVALID_FORMAT, `${ propertyKey.toString() } is not assignable to ${ typeof newValue }`);
             }
 
-            if(newValue && !isValidCPF(newValue)) {
+            if(newValue !== null && newValue !== undefined && !isValidCPF(newValue)) {
                 throw new ValidationException(StatusCode.BAD_REQUEST, ErrorEnum.INVALID_CPF, msg || `Invalid CPF: ${ propertyKey.toString() }`);
             }
 
