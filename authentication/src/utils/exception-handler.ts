@@ -20,9 +20,9 @@ export function controllerExceptionHandler(req: Request, res: Response, error: u
 
     if(error instanceof ValidationException) {
         responseError = { ...responseError, ...error }
-        console.error('Handling error with Validation Exception:', responseError);
+        console.error(new Date(), '-', 'Handling error with Validation Exception:', responseError);
     } else {
-        console.error(error);
+        console.error(new Date(), '-', error);
     }
 
     return res.status(responseError.status).json(responseError);
