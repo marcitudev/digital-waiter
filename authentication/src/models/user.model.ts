@@ -8,10 +8,10 @@ import { Phone } from "./phone.model";
 export class User{
     id: number | null;
 
-    @Length(3, 255, 'Firstname must be between 3 and 255 characteres')
+    @Length(3, 255, false, 'Firstname must be between 3 and 255 characteres')
     firstName: string;
 
-    @Length(3, 255, 'Lastname must be between 3 and 255 characteres')
+    @Length(3, 255, false, 'Lastname must be between 3 and 255 characteres')
     lastName: string;
 
     cpf: CPF;
