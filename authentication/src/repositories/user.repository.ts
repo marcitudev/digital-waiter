@@ -1,7 +1,7 @@
 import { UserDTO } from '../dtos/user.dto';
 import { User } from '../models/user.model';
 import pool from '../config/db';
-import { QueryResultRow } from 'pg';
+import { PoolClient, QueryResultRow } from 'pg';
 import { GenericRepository } from './generic.repository';
 
 class UserRepository extends GenericRepository<UserDTO> {
@@ -10,7 +10,7 @@ class UserRepository extends GenericRepository<UserDTO> {
         super('users');
     }
 
-    async create(user: User): Promise<UserDTO>{
+    async create(user: User, client?: PoolClient): Promise<UserDTO>{
         return new Promise<UserDTO>((resolve, reject) => {
             const { firstName, lastName, cpf, email, password, phone, address, status } = user;
             const query = `
@@ -42,7 +42,9 @@ class UserRepository extends GenericRepository<UserDTO> {
                 process.env.CRYPTO_KEY                                    // $9
             ];
 
-            pool.query(query, values, (error, response) => {
+            const agentQuery = client || pool;
+
+            agentQuery.query(query, values, (error, response) => {
                 if(error) reject(error);
                 if(response) resolve(this.buildUser(response.rows[0]));
             });
@@ -55,6 +57,10 @@ class UserRepository extends GenericRepository<UserDTO> {
 
     async existsByCpf(cpf: string): Promise<boolean>{
         return super.existsByAttributeEqualTo('cpf', cpf);
+    }
+
+    async existsByEmail(email: string): Promise<boolean>{
+        return super.existsByAttributeEqualTo('email', email);
     }
 
     private buildUser(user: QueryResultRow): UserDTO{
