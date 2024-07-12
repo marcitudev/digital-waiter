@@ -6,7 +6,7 @@ export class CPF{
     cpf: string;
 
     constructor(cpf: string){
-        this.cpf = cpf.replace(/\D/g, '');
+        this.cpf = cpf;
     }
 
     get value(): string{

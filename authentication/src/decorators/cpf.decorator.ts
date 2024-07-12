@@ -18,7 +18,7 @@ function CPFFormat(msg?: string): PropertyDecorator{
                 throw new ValidationException(StatusCode.BAD_REQUEST, ErrorEnum.INVALID_CPF, msg || `Invalid CPF: ${ propertyKey.toString() }`);
             }
 
-            value = newValue;
+            value = newValue.replace(/\D/g, '');
         }
 
         Object.defineProperty(target, propertyKey, {
