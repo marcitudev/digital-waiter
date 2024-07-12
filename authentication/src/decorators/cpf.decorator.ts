@@ -14,7 +14,7 @@ function CPFFormat(msg?: string): PropertyDecorator{
                 throw new ValidationException(StatusCode.BAD_REQUEST, ErrorEnum.INVALID_FORMAT, `${ propertyKey.toString() } is not assignable to ${ typeof newValue }`);
             }
 
-            if(newValue !== null && newValue !== undefined && !isValidCPF(newValue)) {
+            if(!newValue || !isValidCPF(newValue)) {
                 throw new ValidationException(StatusCode.BAD_REQUEST, ErrorEnum.INVALID_CPF, msg || `Invalid CPF: ${ propertyKey.toString() }`);
             }
 
