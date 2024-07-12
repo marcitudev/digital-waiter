@@ -1,10 +1,12 @@
 import pool from '../config/db';
+import { ValidationException } from '../exceptions/validation.exception';
 
 // models
 import { UserDTO } from '../dtos/user.dto';
 import { User } from '../models/user.model';
 import { ErrorEnum } from '../enums/error.enum';
 import { StatusCode } from '../enums/status-code.enum';
+import { Status } from '../enums/status.enum';
 
 // services
 import addressService from './address.service';
@@ -12,7 +14,6 @@ import phoneService from './phone.service';
 
 // repository
 import userRepository from '../repositories/user.repository';
-import { ValidationException } from '../exceptions/validation.exception';
 
 class UserService{
     
@@ -36,6 +37,7 @@ class UserService{
             user.address = await addressService.create(address, client);
             user.phone = await phoneService.create(phone, client);
 
+            user.status = Status.ACTIVE;
             const userRegistered: UserDTO = await userRepository.create(user, client);
 
             await client.query('COMMIT');

@@ -51,4 +51,12 @@ export class User{
         this.status = status;
         this.password =  password;
     }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    static transformAnInstanceIntoAUser(userInstance: { [key: string]: any }): User{
+        const { id, firstName, lastName, cpf, email, phone, address, status, password } = userInstance;
+        const phoneEntity = new Phone(null, phone);
+
+        return new User(id, firstName, lastName, cpf, email, phoneEntity, address, status, password);
+    }
 }
