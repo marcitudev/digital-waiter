@@ -1,4 +1,5 @@
 import { Length } from "../decorators/length.decorator";
+import { NotNull } from "../decorators/not-null.decorator";
 import { Status } from "../enums/status.enum";
 import { Address } from "./address.model";
 import { CPF } from "./cpf.model";
@@ -15,10 +16,18 @@ export class User{
     lastName: string;
 
     cpf: CPF;
+
     email: Email;
+
+    @NotNull()
     phone: Phone;
+
+    @NotNull()
     address: Address;
+    
     status: Status;
+
+    @Length(6, 30, false, 'Password must be between 6 and 30 characteres')
     password: string;
 
     constructor(

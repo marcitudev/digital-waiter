@@ -22,7 +22,7 @@ class UserService{
         try{
             await client.query('BEGIN');
             
-            const { firstName, lastName, cpf, email, address, phone, password } = user;
+            const { cpf, email, address, phone } = user;
 
             const existsByCpf = await userRepository.existsByCpf(cpf.value);
             if(existsByCpf) throw new ValidationException(StatusCode.BAD_REQUEST, ErrorEnum.CPF_ALREADY_EXISTS, 'CPF already exists');
@@ -32,9 +32,6 @@ class UserService{
 
             if(!address) throw new ValidationException(StatusCode.BAD_REQUEST, ErrorEnum.INVALID_ADDRESS, 'Invalid address');
             if(!phone) throw new ValidationException(StatusCode.BAD_REQUEST, ErrorEnum.INVALID_PHONE_NUMBER, 'Invalid phone number');
-            if(!firstName) throw new ValidationException(StatusCode.BAD_REQUEST, ErrorEnum.INVALID_FISTNAME, 'Invalid first name');
-            if(!lastName) throw new ValidationException(StatusCode.BAD_REQUEST, ErrorEnum.INVALID_LASTNAME, 'Invalid last name');
-            if(!password) throw new ValidationException(StatusCode.BAD_REQUEST, ErrorEnum.INVALID_PASSWORD, 'Invalid password');
 
             user.address = await addressService.create(address, client);
             user.phone = await phoneService.create(phone, client);
