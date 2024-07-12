@@ -14,7 +14,7 @@ function EmailFormat(msg?: string): PropertyDecorator{
                 throw new ValidationException(StatusCode.BAD_REQUEST, ErrorEnum.INVALID_FORMAT, `${ propertyKey.toString() } is not assignable to ${ typeof newValue }`);
             }
 
-            if(newValue !== null && newValue !== undefined && !isValidEmail(newValue)) {
+            if(!newValue || !isValidEmail(newValue)) {
                 throw new ValidationException(StatusCode.BAD_REQUEST, ErrorEnum.INVALID_EMAIL, msg || `Invalid email: ${ newValue }`);
             }
 
