@@ -18,7 +18,7 @@ function PhoneNumberFormat(msg?: string): PropertyDecorator{
                 throw new ValidationException(StatusCode.BAD_REQUEST, ErrorEnum.INVALID_PHONE_NUMBER, msg || `Invalid phone number: ${ propertyKey.toString() }`);
             }
 
-            value = newValue;
+            value = newValue.replace(/\D/g, '');
         }
 
         Object.defineProperty(target, propertyKey, {
@@ -34,6 +34,8 @@ function PhoneNumberFormat(msg?: string): PropertyDecorator{
 const isValidPhoneNumber = (number: string): boolean => {
     const ddd = number.substring(0,2);
     const phoneNumber = number.substring(2);
+
+    if(ddd.length !== 2 || phoneNumber.length !== 9) return false;
 
     return isValidDDD(ddd) && isValidNumber(phoneNumber);
 }

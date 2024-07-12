@@ -8,7 +8,7 @@ export class Phone{
 
     constructor(id: number | null, number: string) {
         this.id = id;
-        this.number = number.replace(/\D/g, '');
+        this.number = number;
     }
 
     get value(): string{
