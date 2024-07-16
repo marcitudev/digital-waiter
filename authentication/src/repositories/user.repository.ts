@@ -79,7 +79,9 @@ class UserRepository extends GenericRepository<UserDTO> {
         return new UserDTO(
             user?.id,
             user?.first_name,
-            user?.last_name);
+            user?.last_name,
+            user?.email
+        );
     }
 
 }
