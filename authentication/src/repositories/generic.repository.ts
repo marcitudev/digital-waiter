@@ -32,6 +32,26 @@ export abstract class GenericRepository<T>{
                 else resolve(null);
             });
         });
+    
+    }
+    protected async getByAttributesEqualTo(attrMap: Map<unknown, unknown>, buildObjectFunction: (row: QueryResultRow) => T | Promise<T>): Promise<T | null>{
+        return new Promise((resolve, reject) => {
+            let query = this.query.concat(` WHERE `);
+
+            let paramIndex = 1;
+            for(const [attr] of attrMap){
+                if(paramIndex > 1) 
+                    query = query.concat(' AND ');
+                query = query.concat(` ${attr} = $${paramIndex}`);
+                paramIndex++;
+            }
+
+            pool.query(query, [...attrMap.values()], (error, response) => {
+                if(error) reject(error);
+                else if(response.rows.length > 0) resolve(buildObjectFunction(response.rows[0]));
+                else resolve(null);
+            });
+        });
     }
 
     protected async getByAttributeLikeAndIgnoreCase(attr: unknown, attrValue: unknown, buildObjectFunction: (row: QueryResultRow) => T | Promise<T>): Promise<T | null>{
