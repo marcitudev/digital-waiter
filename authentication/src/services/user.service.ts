@@ -4,6 +4,7 @@ import { ValidationException } from '../exceptions/validation.exception';
 // models
 import { UserDTO } from '../dtos/user.dto';
 import { User } from '../models/user.model';
+import { Email } from '../models/email.model';
 import { ErrorEnum } from '../enums/error.enum';
 import { StatusCode } from '../enums/status-code.enum';
 import { Status } from '../enums/status.enum';
@@ -55,6 +56,16 @@ class UserService{
         const user = await userRepository.getById(id);
         if(!user) throw new ValidationException(StatusCode.NOT_FOUND, ErrorEnum.USER_NOT_FOUND, 'User not found');
         return user;
+    }
+
+    async getByEmailAndPassword(email: string, password: string){
+        const emailObject = new Email(email);
+        return await userRepository.getByEmailAndPassword(emailObject.value, password);
+    }
+
+    async getByEmail(email: string){
+        const emailObject = new Email(email);
+        return await userRepository.getByEmail(emailObject.value);
     }
 
 }

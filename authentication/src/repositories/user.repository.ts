@@ -63,6 +63,18 @@ class UserRepository extends GenericRepository<UserDTO> {
         return super.existsByAttributeEqualTo('email', email);
     }
 
+    async getByEmail(email: string): Promise<UserDTO | null>{
+        return super.getByAttributeEqualTo('LOWER(email)', email.toLowerCase(), this.buildUser);
+    }
+
+    async getByEmailAndPassword(email: string, password: string): Promise<UserDTO | null>{
+        const attrMap = new Map<string, string>();
+        attrMap.set(`LOWER(email)`, email.toLowerCase());
+        attrMap.set(`pgp_sym_decrypt(password, '${process.env.CRYPTO_KEY}')`, password);
+
+        return super.getByAttributesEqualTo(attrMap, this.buildUser);
+    }
+
     private buildUser(user: QueryResultRow): UserDTO{
         return new UserDTO(
             user?.id,
