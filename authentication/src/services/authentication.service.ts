@@ -25,20 +25,22 @@ class AuthenticationService{
     async refresh(refreshToken: string): Promise<Authentication | void>{
         try {
             const decoded = await this.verifyAsync(refreshToken, process.env.AUTH_KEY as string) as AuthUser;
+            const user = await userService.getByEmail(decoded.email);
 
-            const { email } = decoded;
-            if(email) {
-                const user = await userService.getByEmail(email);
-    
-                if(user) {
-                    return this.generateToken(user.id, email);
-                } 
-    
+            if(!user) 
+                throw new ValidationException(StatusCode.UNAUTHORIZED, ErrorEnum.UNAUTHORIZED, 'User unauthorized');
+
+            const { id, email } = user;
+            return this.generateToken(id, email);
+        } catch(error){
+            if (error instanceof jwt.TokenExpiredError) {
+                throw new ValidationException(StatusCode.UNAUTHORIZED, ErrorEnum.EXPIRED_TOKEN, 'Refresh token expired');
+            } else if (error instanceof jwt.JsonWebTokenError) {
+                throw new ValidationException(StatusCode.UNAUTHORIZED, ErrorEnum.INVALID_TOKEN, 'Invalid refresh token');
+            } else {
+                throw new ValidationException(StatusCode.UNAUTHORIZED, ErrorEnum.UNAUTHORIZED, 'User unauthorized');
             }
 
-            throw new ValidationException(StatusCode.UNAUTHORIZED, ErrorEnum.UNAUTHORIZED, 'User unauthorized');
-        } catch(error){
-            throw new ValidationException(StatusCode.UNAUTHORIZED, ErrorEnum.UNAUTHORIZED, 'User unauthorized');
         }
     }
 
