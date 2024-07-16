@@ -18,7 +18,7 @@ route.post('', [
         validationResultHandler(req);
 
         const { email, password } = req.body;
-        const authentication = await authenticationService.auth(email, password);
+        const authentication = await authenticationService.authenticate(email, password);
 
         return res.status(200).json(authentication);
     } catch(error){

@@ -15,7 +15,7 @@ class AuthenticationService{
         this.verifyAsync = promisify(jwt.verify);
     }
 
-    async auth(email: string, password: string): Promise<Authentication>{
+    async authenticate(email: string, password: string): Promise<Authentication>{
         const user = await userService.getByEmailAndPassword(email, password);
         if(!user) throw new ValidationException(StatusCode.UNAUTHORIZED, ErrorEnum.UNAUTHORIZED, 'User unauthorized');
         
