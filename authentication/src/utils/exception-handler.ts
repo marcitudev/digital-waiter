@@ -1,13 +1,6 @@
 import { Request, Response } from "express";
 import { ValidationException } from "../exceptions/validation.exception";
-
-interface ResponseError {
-    resource: string,
-    method: string,
-    status: number,
-    code: string,
-    message: string
-}
+import { ResponseError } from "../interfaces/response-error.interface";
 
 export function controllerExceptionHandler(req: Request, res: Response, error: unknown){
     let responseError: ResponseError = {
