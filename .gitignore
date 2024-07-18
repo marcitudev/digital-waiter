@@ -2,6 +2,9 @@
 .vscode
 .hintrc
 
+## build path
+dist
+
 ## NPM installation configuration
 node_modules
 package-lock.json
