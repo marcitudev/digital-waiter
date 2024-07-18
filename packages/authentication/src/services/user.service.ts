@@ -1,13 +1,8 @@
-import pool from '../config/db';
-import { ValidationException } from '../exceptions/validation.exception';
+// import from shared-service
+import { User, UserDTO, Email, ErrorEnum, StatusCode, Status, ValidationException } from 'shared-service';
 
-// models
-import { UserDTO } from '../dtos/user.dto';
-import { User } from '../models/user.model';
-import { Email } from '../models/email.model';
-import { ErrorEnum } from '../enums/error.enum';
-import { StatusCode } from '../enums/status-code.enum';
-import { Status } from '../enums/status.enum';
+import pool from '../config/db';
+
 
 // services
 import addressService from './address.service';

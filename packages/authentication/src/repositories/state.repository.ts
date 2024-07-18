@@ -1,4 +1,6 @@
-import { State } from '../models/state.model';
+// import from shared-service
+import { State } from 'shared-service';
+
 import { QueryResultRow } from 'pg';
 import { GenericRepository } from './generic.repository';
 

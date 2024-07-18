@@ -1,5 +1,7 @@
+// import from shared-service
+import { Address } from 'shared-service';
+
 import { PoolClient, QueryResultRow } from 'pg';
-import { Address } from '../models/address.model';
 import { GenericRepository } from './generic.repository';
 import cityRepository from './city.repository';
 import pool from '../config/db';

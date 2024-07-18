@@ -1,14 +1,12 @@
+// import from shared-service
+import { User, controllerExceptionHandler } from 'shared-service';
+
 import * as express from 'express';
 import { Request, Response } from 'express';
-
-// models
-import { User } from '../models/user.model';
 
 // services
 import userService from '../services/user.service';
 
-// utils
-import { controllerExceptionHandler } from '../utils/exception-handler';
 
 const route = express.Router();
 

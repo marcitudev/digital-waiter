@@ -1,11 +1,9 @@
+// import from shared-service
+import { AuthUser, Authentication, ErrorEnum, StatusCode, ValidationException } from 'shared-service';
+
 import { promisify } from 'util';
-import { ErrorEnum } from '../enums/error.enum';
-import { StatusCode } from '../enums/status-code.enum';
-import { ValidationException } from '../exceptions/validation.exception';
-import { Authentication } from '../interfaces/authentication.interface';
 import userService from './user.service';
 import * as jwt from 'jsonwebtoken';
-import { AuthUser } from '../interfaces/auth-user.interface';
 
 class AuthenticationService{
 

@@ -1,4 +1,6 @@
-import { City } from '../models/city.model';
+// import from shared-service
+import { City } from 'shared-service';
+
 import cityRepository from '../repositories/city.repository';
 
 class CityService{

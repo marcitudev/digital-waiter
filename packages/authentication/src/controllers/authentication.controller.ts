@@ -1,9 +1,9 @@
+// import from shared-service
+import { ErrorEnum, validationResultHandler, controllerExceptionHandler } from 'shared-service';
+
 import * as express from 'express';
 import { Request, Response } from 'express';
 import { body } from 'express-validator';
-import { ErrorEnum } from '../enums/error.enum';
-import { validationResultHandler } from '../utils/validation-result-handler';
-import { controllerExceptionHandler } from '../utils/exception-handler';
 import authenticationService from '../services/authentication.service';
 
 const route = express.Router();

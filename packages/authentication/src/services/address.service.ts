@@ -1,10 +1,10 @@
+// import from shared-service
+import { Address, ErrorEnum, StatusCode, ValidationException } from 'shared-service';
+
 import { PoolClient } from 'pg';
-import { ErrorEnum } from '../enums/error.enum';
-import { StatusCode } from '../enums/status-code.enum';
-import { ValidationException } from '../exceptions/validation.exception';
-import { Address } from '../models/address.model';
 import addressRepository from '../repositories/address.repository';
 import cityService from './city.service';
+
 
 class AddressService{
     

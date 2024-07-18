@@ -1,6 +1,8 @@
+// import from shared-service
+import { Phone } from 'shared-service';
+
 import { PoolClient, QueryResultRow } from 'pg';
 import { GenericRepository } from './generic.repository';
-import { Phone } from '../models/phone.model';
 import pool from '../config/db';
 
 class PhoneRepository extends GenericRepository<Phone>{

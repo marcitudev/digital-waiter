@@ -1,6 +1,8 @@
+// import from shared-service
+import { City } from 'shared-service';
+
 import { QueryResultRow } from 'pg';
 import { GenericRepository } from './generic.repository';
-import { City } from '../models/city.model';
 import stateRepository from './state.repository';
 
 class CityRepository extends GenericRepository<City>{

@@ -1,8 +1,9 @@
+// import from shared-service
+import { ErrorEnum, StatusCode, ValidationException } from 'shared-service';
+
+import { Phone } from 'shared-service/models/phone.model';
+
 import { PoolClient } from 'pg';
-import { ErrorEnum } from '../enums/error.enum';
-import { StatusCode } from '../enums/status-code.enum';
-import { ValidationException } from '../exceptions/validation.exception';
-import { Phone } from '../models/phone.model';
 import phoneRepository from '../repositories/phone.repository';
 
 class PhoneService{
