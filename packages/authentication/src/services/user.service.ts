@@ -47,6 +47,17 @@ class UserService{
         }
     }
 
+    async changePassword(userId: number, oldPassword: string, newPassword: string): Promise<void>{
+        if(!userId) throw new ValidationException(StatusCode.BAD_REQUEST, ErrorEnum.INVALID_USER, 'Invalid user');
+
+        if(oldPassword === newPassword) throw new ValidationException(StatusCode.BAD_REQUEST, ErrorEnum.THE_NEW_PASSWORD_MUST_BE_FROM_THE_OLD_ONE, 'The new password must be different from the old one');
+
+        const existsByIdAndPassword = await userRepository.existsByIdAndPassword(userId, oldPassword);
+        if(!existsByIdAndPassword) throw new ValidationException(StatusCode.UNAUTHORIZED, ErrorEnum.INVALID_PASSWORD, 'Invalid password');
+
+        await userRepository.changePassword(userId, newPassword);
+    }
+
     async getById(id: number): Promise<UserDTO | null>{
         const user = await userRepository.getById(id);
         if(!user) throw new ValidationException(StatusCode.NOT_FOUND, ErrorEnum.USER_NOT_FOUND, 'User not found');

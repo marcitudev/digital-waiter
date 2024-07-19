@@ -52,6 +52,27 @@ class UserRepository extends GenericRepository<UserDTO> {
         });
     }
 
+    async changePassword(userId: number, newPassword: string): Promise<void>{
+        return new Promise<void>((resolve, reject) => {
+            const query = `
+                UPDATE users
+                SET password = pgp_sym_encrypt($2, $3)
+                WHERE id = $1
+            `;
+
+            const values = [
+                userId,                                         // $1
+                newPassword,                                    // $2
+                process.env.CRYPTO_KEY                          // $3
+            ];
+
+            pool.query(query, values, (error, response) => {
+                if(error) reject(error);
+                if(response) resolve();
+            });
+        });
+    }
+
     async getById(id: number): Promise<UserDTO | null>{
         return super.getByAttributeEqualTo('id', id, this.buildUser);
     }
@@ -62,6 +83,14 @@ class UserRepository extends GenericRepository<UserDTO> {
 
     async existsByEmail(email: string): Promise<boolean>{
         return super.existsByAttributeEqualTo('email', email);
+    }
+
+    async existsByIdAndPassword(id: number, password: string): Promise<boolean>{
+        const attrMap = new Map<string, unknown>();
+        attrMap.set(`id`, id);
+        attrMap.set(`pgp_sym_decrypt(password, '${process.env.CRYPTO_KEY}')`, password);
+
+        return super.existsByAttributesEqualTo(attrMap);
     }
 
     async getByEmail(email: string): Promise<UserDTO | null>{
