@@ -49,7 +49,7 @@ route.post('/refresh-token', [
 export const verifyToken = async (req: AuthenticationRequest, res: Response, next: NextFunction) => {
     try{
         const routeDontNeedAuthentication = routesWithoutAuthentication.some(([ method, path ]) => {
-            return method.toLowerCase() === req.method.toLowerCase() && path.toLowerCase() === req.baseUrl.toLowerCase();
+            return method.toLowerCase() === req.method.toLowerCase() && path.toLowerCase() === req.originalUrl.toLowerCase();
         });
         if(routeDontNeedAuthentication) return next();
     
