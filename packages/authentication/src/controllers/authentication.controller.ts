@@ -1,12 +1,17 @@
 // import from shared-service
-import { ErrorEnum, validationResultHandler, controllerExceptionHandler } from 'shared-service';
+import { ErrorEnum, validationResultHandler, controllerExceptionHandler, AuthenticationRequest } from 'shared-service';
 
 import * as express from 'express';
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { body } from 'express-validator';
 import authenticationService from '../services/authentication.service';
 
 const route = express.Router();
+
+type keyValueTuple = [string, string];
+const routesWithoutAuthentication: Array<keyValueTuple> = [
+    ['POST', '/users']
+]
 
 route.post('', [
     body('email').notEmpty().withMessage(ErrorEnum.EMAIL_IS_REQUIRED)
@@ -24,7 +29,6 @@ route.post('', [
     } catch(error){
         controllerExceptionHandler(req, res, error);
     }
-
 });
 
 route.post('/refresh-token', [
@@ -40,7 +44,24 @@ route.post('/refresh-token', [
     } catch(error){
         controllerExceptionHandler(req, res, error);
     }
-
 });
+
+export const verifyToken = async (req: AuthenticationRequest, res: Response, next: NextFunction) => {
+    try{
+        const routeDontNeedAuthentication = routesWithoutAuthentication.some(([ method, path ]) => {
+            return method.toLowerCase() === req.method.toLowerCase() && path.toLowerCase() === req.baseUrl.toLowerCase();
+        });
+        if(routeDontNeedAuthentication) return next();
+    
+        const { authorization } = req.headers;
+        const user = await authenticationService.validateRequest(authorization ?? '');
+
+        req.user = user;
+    
+        return next();
+    } catch(error){
+        controllerExceptionHandler(req, res, error);
+    }
+}
 
 export default route;

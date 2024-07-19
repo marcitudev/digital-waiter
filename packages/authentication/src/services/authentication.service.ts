@@ -21,15 +21,31 @@ class AuthenticationService{
     }
 
     async refresh(refreshToken: string): Promise<Authentication | void>{
+        const decoded = await this.verifyToken(refreshToken);
+        const user = await userService.getByEmail(decoded.email);
+
+        if(!user) 
+            throw new ValidationException(StatusCode.UNAUTHORIZED, ErrorEnum.UNAUTHORIZED, 'User unauthorized');
+
+        const { id, email } = user;
+        return this.generateToken(id, email);
+    }
+
+    async validateRequest(token: string): Promise<AuthUser>{
+        if(!token) throw new ValidationException(StatusCode.UNAUTHORIZED, ErrorEnum.UNAUTHORIZED, 'Authorization header is required');
+
+        const decoded = await this.verifyToken(token);
+        if(!decoded.id) throw new ValidationException(StatusCode.UNAUTHORIZED, ErrorEnum.UNAUTHORIZED, 'User unauthorized');
+
+        const user = await userService.getById(decoded.id);
+        if(!user) throw new ValidationException(StatusCode.UNAUTHORIZED, ErrorEnum.UNAUTHORIZED, 'User unauthorized');
+
+        return { id: user.id, email: user.email };
+    }
+
+    async verifyToken(token: string): Promise<AuthUser>{
         try {
-            const decoded = await this.verifyAsync(refreshToken, process.env.AUTH_KEY as string) as AuthUser;
-            const user = await userService.getByEmail(decoded.email);
-
-            if(!user) 
-                throw new ValidationException(StatusCode.UNAUTHORIZED, ErrorEnum.UNAUTHORIZED, 'User unauthorized');
-
-            const { id, email } = user;
-            return this.generateToken(id, email);
+            return await this.verifyAsync(token, process.env.AUTH_KEY as string) as AuthUser;
         } catch(error){
             if (error instanceof jwt.TokenExpiredError) {
                 throw new ValidationException(StatusCode.UNAUTHORIZED, ErrorEnum.EXPIRED_TOKEN, 'Refresh token expired');
@@ -38,7 +54,6 @@ class AuthenticationService{
             } else {
                 throw new ValidationException(StatusCode.UNAUTHORIZED, ErrorEnum.UNAUTHORIZED, 'User unauthorized');
             }
-
         }
     }
 
