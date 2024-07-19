@@ -13,6 +13,7 @@ export * from './dtos/user.dto';
 // interfaces
 export * from './interfaces/auth-user.interface';
 export * from './interfaces/authentication.interface';
+export * from './interfaces/authentication-request.interface';
 export * from './interfaces/response-error.interface';
 
 // enums
