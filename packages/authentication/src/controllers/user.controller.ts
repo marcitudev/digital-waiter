@@ -32,7 +32,7 @@ const route = express.Router();
  *               address:
  *                type: object
  *                properties:
- *                  road:
+ *                  street:
  *                      type: string
  *                      example: 123 Main St
  *                  neighbourhood:

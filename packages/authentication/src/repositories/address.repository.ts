@@ -18,10 +18,10 @@ class AddressRepository extends GenericRepository<Address>{
 
     async create(address: Address, client?: PoolClient): Promise<Address>{
         return new Promise<Address>((resolve, reject) => {
-            const { road, neighbourhood, city, number } = address;
+            const { street, neighbourhood, city, number } = address;
             const query = `
                 INSERT INTO adresses(
-                    road, 
+                    street, 
                     neighbourhood, 
                     city_id, 
                     number
@@ -33,7 +33,7 @@ class AddressRepository extends GenericRepository<Address>{
             `
 
             const values = [
-                road.trim(),
+                street.trim(),
                 neighbourhood.trim(),
                 city.id,
                 number
@@ -53,7 +53,7 @@ class AddressRepository extends GenericRepository<Address>{
 
         return new Address(
             address?.id,
-            address?.road,
+            address?.street,
             address?.neighbourhood,
             city!,
             address?.number);

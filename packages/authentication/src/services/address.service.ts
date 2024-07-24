@@ -15,9 +15,9 @@ class AddressService{
     }
 
     private async createValidation(address: Address){
-        const { road, neighbourhood, city } = address;
+        const { street, neighbourhood, city } = address;
 
-        if(!road) throw new ValidationException(StatusCode.BAD_REQUEST, ErrorEnum.INVALID_ROAD, 'Invalid road');
+        if(!street) throw new ValidationException(StatusCode.BAD_REQUEST, ErrorEnum.INVALID_STREET, 'Invalid street');
         if(!neighbourhood) throw new ValidationException(StatusCode.BAD_REQUEST, ErrorEnum.INVALID_NEIGHBOURHOOD, 'Invalid neighbourhood');
         if(!city?.id) throw new ValidationException(StatusCode.BAD_REQUEST, ErrorEnum.INVALID_CITY, 'Invalid city');
 
