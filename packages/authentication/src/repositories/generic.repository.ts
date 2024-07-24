@@ -1,5 +1,7 @@
+// import from shared-service
+import { pool } from 'shared-service';
+
 import { QueryResultRow } from 'pg';
-import pool from '../config/db';
 
 export abstract class GenericRepository<T>{
     private table: string;

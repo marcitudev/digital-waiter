@@ -1,10 +1,9 @@
 // import from shared-service
-import { Address } from 'shared-service';
+import { Address, pool } from 'shared-service';
 
 import { PoolClient, QueryResultRow } from 'pg';
 import { GenericRepository } from './generic.repository';
 import cityRepository from './city.repository';
-import pool from '../config/db';
 
 class AddressRepository extends GenericRepository<Address>{
 

@@ -1,8 +1,5 @@
 // import from shared-service
-import { User, UserDTO, Email, ErrorEnum, StatusCode, Status, ValidationException } from 'shared-service';
-
-import pool from '../config/db';
-
+import { User, UserDTO, Email, ErrorEnum, StatusCode, Status, ValidationException, pool } from 'shared-service';
 
 // services
 import addressService from './address.service';

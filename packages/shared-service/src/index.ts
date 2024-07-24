@@ -1,3 +1,6 @@
+// config
+export * from './config/db'
+
 // models
 export * from './models/address.model';
 export * from './models/city.model';
@@ -27,7 +30,3 @@ export * from './exceptions/validation.exception';
 // utils
 export * from './utils/exception-handler';
 export * from './utils/validation-result-handler';
-
-
-
-

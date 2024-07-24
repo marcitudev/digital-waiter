@@ -1,7 +1,6 @@
 // import from shared-service
-import { User, UserDTO } from 'shared-service';
+import { User, UserDTO, pool } from 'shared-service';
 
-import pool from '../config/db';
 import { PoolClient, QueryResultRow } from 'pg';
 import { GenericRepository } from './generic.repository';
 
