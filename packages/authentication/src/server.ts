@@ -1,4 +1,5 @@
 import express, { Router } from 'express';
+import dotenv from 'dotenv';
 
 // controllers
 import userController from './controllers/user.controller';
@@ -6,6 +7,8 @@ import authenticationController from './controllers/authentication.controller';
 
 // middlewares
 import { verifyToken } from './controllers/authentication.controller';
+
+dotenv.config();
 
 const app = express();
 const route = Router();

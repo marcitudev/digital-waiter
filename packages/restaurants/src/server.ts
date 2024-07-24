@@ -1,5 +1,9 @@
 import express, { Router } from 'express';
 
+import dotenv from 'dotenv';
+
+dotenv.config();
+
 const app = express();
 const route = Router();
 const PORT = 3002;
