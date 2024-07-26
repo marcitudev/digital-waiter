@@ -17,6 +17,9 @@ package-lock.json
 npm-debug.log
 yarn-error.log
 
+## Angular
+.angular
+
 ## NodeJS
 .env
 
