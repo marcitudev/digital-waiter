@@ -1,13 +1,34 @@
 ## Visual Studio Code configurations
 .vscode
+.history
 .hintrc
 
 ## build path
 dist
+/tmp
+/out-tsc
+/bazel-out
 
 ## NPM installation configuration
 node_modules
 package-lock.json
 
+## node
+npm-debug.log
+yarn-error.log
+
 ## NodeJS
 .env
+
+# Miscellaneous
+/.angular/cache
+.sass-cache/
+/connect.lock
+/coverage
+/libpeerconnection.log
+testem.log
+/typings
+
+# System files
+.DS_Store
+Thumbs.db
