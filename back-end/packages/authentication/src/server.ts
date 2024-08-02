@@ -1,5 +1,6 @@
 import express, { Router } from 'express';
 import dotenv from 'dotenv';
+import cors from 'cors';
 
 // controllers
 import userController from './controllers/user.controller';
@@ -14,6 +15,7 @@ const app = express();
 const route = Router();
 const PORT = 3001;
 
+app.use(cors());
 app.use(route);
 app.use(express.json());
 
