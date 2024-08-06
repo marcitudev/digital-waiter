@@ -1,5 +1,5 @@
 // import from shared-service
-import { ErrorEnum, validationResultHandler, controllerExceptionHandler, AuthenticationRequest } from 'shared-service';
+import { ErrorEnum, validationResultHandler, controllerExceptionHandler, AuthenticationRequest, decrypt } from 'shared-service';
 
 import * as express from 'express';
 import { Request, Response, NextFunction } from 'express';
@@ -13,7 +13,7 @@ const routesWithoutAuthentication: Array<keyValueTuple> = [
     ['POST', '/users']
 ]
 
-route.post('', [
+route.post('', decrypt, [
     body('email').notEmpty().withMessage(ErrorEnum.EMAIL_IS_REQUIRED)
                  .isLength({ min: 6, max: 255 }).withMessage(ErrorEnum.INVALID_EMAIL),
     body('password').notEmpty().withMessage(ErrorEnum.PASSWORD_IS_REQUIRED)

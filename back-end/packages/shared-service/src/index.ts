@@ -30,3 +30,6 @@ export * from './exceptions/validation.exception';
 // utils
 export * from './utils/exception-handler';
 export * from './utils/validation-result-handler';
+
+// middlewares
+export * from './middlewares/decrypt.middleware';
