@@ -1,0 +1,21 @@
+@import './variables.scss';
+
+.button{
+  height: 38px;
+  border: none;
+  border-radius: 5px;
+  width: 100%;
+  font-weight: bold;
+  height: 50px;
+}
+
+.button-primary{
+  color: $main-white;
+  background-color: $main-blue;
+
+  &:hover{
+    background-color: $main-dark-blue;
+  }
+
+  transition: .5s ease background-color;
+}
