@@ -1,9 +1,43 @@
 @import '../../styles/titles.scss';
+@import '../../styles/variables.scss';
+@import '../../styles/buttons.scss';
+
+.login-component{
+  position: relative;
+  height: 100vh;
+}
 
 .login-box{
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translateY(-50%);
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
+  min-width: 60%;
+  max-width: 100%;
+
+  padding: 80px 50px;
+  border-radius: 10px;
+  background-color: $main-red;
+}
+
+.login-header{
+  margin-bottom: 60px !important;
+  color: $main-white;
+}
+
+.input-group > input, span{
+  border: none;
+  height: 50px;
+}
+
+.input-group-text{
+  background-color: $gray-1;
+}
+
+.register-link{
+  color: $main-white;
+  text-decoration: none;
+  display: block;
+  text-align: center;
+  margin-top: 20px;
 }

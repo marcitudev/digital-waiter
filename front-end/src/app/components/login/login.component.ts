@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { AuthenticationService } from '../../services/authentication.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -6,5 +8,39 @@ import { Component } from '@angular/core';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
+
+  formLogin = this.formBuilder.group({
+    email: ['', [Validators.required]],
+    password: ['', [Validators.required]]
+  });
+
+  constructor(
+    private readonly authService: AuthenticationService,
+    private readonly formBuilder: FormBuilder
+  ) { }
+
+  login(event: Event): void{
+    event.preventDefault();
+
+    if(this.formLogin.invalid) return;
+
+    const { email, password } = this.formLogin.value;
+
+    if(email && password) {
+      this.authService.authenticate(email, password).subscribe();
+    }
+  }
+
+  greetByTimeOfDay(): string {
+    const currentTime = new Date().getHours();
+
+    if (currentTime >= 6 && currentTime < 12) {
+      return 'good morning!';
+    } else if (currentTime >= 12 && currentTime < 18) {
+      return 'good afternoon!';
+    } else {
+      return 'good evening!';
+    }
+  }
 
 }
