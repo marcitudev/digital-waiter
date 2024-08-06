@@ -7,7 +7,7 @@ const environment = {
     restaurant: `${baseServiceURL}:3002/`
   },
   production: false,
-  encryptKey: 'your-encryption-key' // change to your key when deploying to production
+  encryptKey: 'D1g!t@lWa1t3r#Request' // change to your key when deploying to production
 }
 
 export default environment;
