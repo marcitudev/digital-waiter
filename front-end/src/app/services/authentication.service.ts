@@ -11,7 +11,7 @@ import { Observable, tap } from 'rxjs';
 })
 export class AuthenticationService {
 
-  authURL = `${environment.servicesURL.authentication}`; // Replace with your actual API endpoint
+  authURL = `${environment.servicesURL.authentication}`;
 
   constructor(
     private readonly http: HttpClient
@@ -20,7 +20,7 @@ export class AuthenticationService {
   authenticate(email: string, password: string): Observable<Authentication> {
     const encryptedAuthData = encryptData({ email, password });
 
-    return this.http.post<Authentication>(`${this.authURL}/authentication`, encryptedAuthData).pipe(
+    return this.http.post<Authentication>(`${this.authURL}authentication`, encryptedAuthData).pipe(
       tap(this.setStoreTokens)
     );
   }
@@ -30,5 +30,9 @@ export class AuthenticationService {
 
     localStorage.setItem('accessToken', accessToken);
     localStorage.setItem('refreshToken', refreshToken);
+  }
+
+  get accessToken(): string {
+    return localStorage.getItem('accessToken') || '';
   }
 }
