@@ -1,3 +1,5 @@
+@import './app/styles/variables.scss';
+
 @font-face {
   font-family: 'Montserrat-Regular';
   src: url('./assets/fonts/Montserrat-Regular.ttf') format('truetype'),
@@ -17,6 +19,10 @@
 }
 
 body{
-  background-color: #f3f3f3;
+  background-color: $main-white;
   font-family: 'Montserrat-Regular', sans-serif;
+}
+
+*{
+  color: $main-black;
 }

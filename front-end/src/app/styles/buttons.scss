@@ -11,11 +11,31 @@
 
 .button-primary{
   color: $main-white;
-  background-color: $main-blue;
+  background-color: $main-black;
+  border: none;
 
   &:hover{
-    background-color: $main-dark-blue;
+    background-color: black;
   }
 
   transition: .5s ease background-color;
+}
+
+.button-primary:disabled{
+  background-color: $secondary-black;
+}
+
+.loading{
+  background: linear-gradient(90deg, $main-black 0%, $main-black 50%, $secondary-black 50%, $secondary-black 100%);
+  background-size: 200% 200%;
+  animation: background-loading 2s ease-in-out infinite;
+}
+
+@keyframes background-loading {
+  0% {
+      background-position: 100% 0;
+  }
+  100% {
+      background-position: -100% 0;
+  }
 }
