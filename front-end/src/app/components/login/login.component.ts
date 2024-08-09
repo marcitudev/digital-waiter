@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthenticationService } from '../../services/authentication.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { faLock, faAt } from '@fortawesome/free-solid-svg-icons'
 
 @Component({
   selector: 'app-login',
@@ -9,10 +10,15 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class LoginComponent {
 
+  faLock = faLock;
+  faAt = faAt;
+
   formLogin = this.formBuilder.group({
     email: ['', [Validators.required]],
     password: ['', [Validators.required]]
   });
+
+  loading: boolean = false;
 
   constructor(
     private readonly authService: AuthenticationService,
@@ -24,10 +30,15 @@ export class LoginComponent {
 
     if(this.formLogin.invalid) return;
 
+    this.loading = true;
+
     const { email, password } = this.formLogin.value;
 
     if(email && password) {
-      this.authService.authenticate(email, password).subscribe();
+      this.authService.authenticate(email, password).subscribe({
+        next: () => this.loading = false,
+        error: () => this.loading = false
+      });
     }
   }
 

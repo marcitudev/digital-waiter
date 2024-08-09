@@ -17,25 +17,25 @@
 
   padding: 80px 50px;
   border-radius: 10px;
-  background-color: $main-red;
+  background-color: $main-yellow;
 }
 
 .login-header{
   margin-bottom: 60px !important;
-  color: $main-white;
 }
 
 .input-group > input, span{
   border: none;
   height: 50px;
+  background-color: $main-white;
 }
 
 .input-group-text{
-  background-color: $gray-1;
+  padding-inline: 20px;
 }
 
 .register-link{
-  color: $main-white;
+  color: $main-black;
   text-decoration: none;
   display: block;
   text-align: center;

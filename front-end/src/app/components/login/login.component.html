@@ -3,17 +3,21 @@
     <h2 class="heading-1 login-header">Hello, {{ greetByTimeOfDay() }} <br> ; )</h2>
 
     <div class="input-group mb-3">
-      <span class="input-group-text" id="basic-addon1">{{ '@' }}</span>
+      <span class="input-group-text" id="basic-addon1">
+        <fa-icon [icon]="faAt"></fa-icon>
+      </span>
       <input type="email" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="basic-addon1" formControlName="email">
     </div>
 
     <div class="input-group mb-3">
-      <span class="input-group-text" id="basic-addon2">{{ '* *' }}</span>
+      <span class="input-group-text" id="basic-addon2">
+        <fa-icon [icon]="faLock"></fa-icon>
+      </span>
       <input type="password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="basic-addon1" formControlName="password">
     </div>
 
     <div>
-      <button type="submit" title="submit" class="button button-primary">Login</button>
+      <button type="submit" title="submit" class="button button-primary" [class.loading]="loading" [disabled]="formLogin.invalid || loading">Login</button>
     </div>
     <div>
       <a routerLink="/register" class="register-link" title="create account">Dont't have an account yet?</a>
