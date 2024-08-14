@@ -1,7 +1,12 @@
+// Angular
 import { Component } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+
+// Fontawesome Icons
+import { faLock, faAt } from '@fortawesome/free-solid-svg-icons';
+
+// Services
 import { AuthenticationService } from '../../services/authentication.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { faLock, faAt } from '@fortawesome/free-solid-svg-icons'
 
 @Component({
   selector: 'app-login',
