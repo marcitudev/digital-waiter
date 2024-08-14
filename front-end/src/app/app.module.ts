@@ -9,6 +9,12 @@ import { LoginComponent } from './components/login/login.component';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
+// NGRX Store
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { StoreModule } from '@ngrx/store';
+import environment from '../environments/environment';
+import { appReducers } from './store/app.reducers';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -19,7 +25,10 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    StoreModule.forRoot(appReducers),
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production })
+
   ],
   providers: [
     provideClientHydration(),
