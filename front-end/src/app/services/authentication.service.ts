@@ -12,6 +12,7 @@ import encryptData from '../utils/encrypt.utils';
 import { Observable, tap } from 'rxjs';
 import environment from '../../environments/environment';
 import { Authentication } from '../interfaces/authentication.interface';
+import { AuthUser } from '../interfaces/user.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +30,7 @@ export class AuthenticationService {
     const encryptedAuthData = encryptData({ email, password });
 
     return this.http.post<Authentication>(`${this.authURL}authentication`, encryptedAuthData).pipe(
-      tap((authentication) => this.setStoreTokens(authentication))
+      tap((authentication) => this.setStoreState(authentication))
     );
   }
 
@@ -37,11 +38,29 @@ export class AuthenticationService {
     this.clearStoreTokens();
   }
 
-  private setStoreTokens(authentication: Authentication): void {
-    this.store.dispatch(actions.authenticate(authentication));
+  private setStoreState(authentication: Authentication): void {
+    const authenticationData = {
+      ...authentication,
+      authUser: this.decodeToken(authentication.accessToken)
+    }
+    this.store.dispatch(actions.authenticate(authenticationData));
   }
 
   private clearStoreTokens(): void {
     this.store.dispatch(actions.logout());
+  }
+
+  private decodeToken(token: string): AuthUser | null {
+    try {
+      const payload = token.split('.')[1];
+      const decodedPayload = atob(payload);
+      const uff8Payload = decodeURIComponent(
+        Array.prototype.map
+        .call(decodedPayload, (c: string) => `%${c.charCodeAt(0).toString(16).padStart(2, '0')}`)
+        .join(''));
+      return JSON.parse(uff8Payload);
+    } catch(error) {
+      return null;
+    }
   }
 }
