@@ -3,11 +3,13 @@ import { NgModule } from '@angular/core';
 import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
 import { provideHttpClient, HttpClientModule, withFetch } from '@angular/common/http';
-import { AppRoutingModule } from './app-routing.module';
 
 // Components
 import { AppComponent } from './app.component';
-import { LoginComponent } from './components/auth/login/login.component';
+
+// Application Modules
+import { AppRoutingModule } from './app-routing.module';
+import { AuthModule } from './components/auth/auth.module';
 
 // Environment
 import environment from '../environments/environment';
@@ -19,11 +21,13 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { StoreModule } from '@ngrx/store';
 import { appReducers } from './store/app.reducers';
+import { RouterModule } from '@angular/router';
+import { HomeComponent } from './components/home/home.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent
+    HomeComponent
   ],
   imports: [
     BrowserModule,
@@ -31,9 +35,9 @@ import { appReducers } from './store/app.reducers';
     HttpClientModule,
     ReactiveFormsModule,
     FontAwesomeModule,
+    AuthModule,
     StoreModule.forRoot(appReducers),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production })
-
   ],
   providers: [
     provideClientHydration(),
