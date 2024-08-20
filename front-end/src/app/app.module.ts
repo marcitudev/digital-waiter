@@ -6,6 +6,7 @@ import { provideHttpClient, HttpClientModule, withFetch } from '@angular/common/
 
 // Components
 import { AppComponent } from './app.component';
+import { HomeComponent } from './components/home/home.component';
 
 // Application Modules
 import { AppRoutingModule } from './app-routing.module';
@@ -21,8 +22,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { StoreModule } from '@ngrx/store';
 import { appReducers } from './store/app.reducers';
-import { RouterModule } from '@angular/router';
-import { HomeComponent } from './components/home/home.component';
+import { metaReducers } from './store/local-storage.reducer';
 
 @NgModule({
   declarations: [
@@ -36,7 +36,7 @@ import { HomeComponent } from './components/home/home.component';
     ReactiveFormsModule,
     FontAwesomeModule,
     AuthModule,
-    StoreModule.forRoot(appReducers),
+    StoreModule.forRoot(appReducers, { metaReducers }),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production })
   ],
   providers: [
