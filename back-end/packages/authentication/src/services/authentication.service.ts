@@ -17,7 +17,8 @@ class AuthenticationService{
         const user = await userService.getByEmailAndPassword(email, password);
         if(!user) throw new ValidationException(StatusCode.UNAUTHORIZED, ErrorEnum.UNAUTHORIZED, 'User unauthorized');
         
-        return this.generateToken(user.id, email);
+        const { id, firstName, lastName } = user;
+        return this.generateToken(id, firstName, lastName, email);
     }
 
     async refresh(refreshToken: string): Promise<Authentication | void>{
@@ -27,8 +28,8 @@ class AuthenticationService{
         if(!user) 
             throw new ValidationException(StatusCode.UNAUTHORIZED, ErrorEnum.UNAUTHORIZED, 'User unauthorized');
 
-        const { id, email } = user;
-        return this.generateToken(id, email);
+        const { id, firstName, lastName, email } = user;
+        return this.generateToken(id, firstName, lastName, email);
     }
 
     async validateRequest(token: string): Promise<AuthUser>{
@@ -57,8 +58,8 @@ class AuthenticationService{
         }
     }
 
-    private generateToken(id: number, email: string): Authentication{
-        const accessToken = jwt.sign({ id, email }, process.env.AUTH_KEY as string, { expiresIn: '30m' });
+    private generateToken(id: number, firstName: string, lastName: string, email: string): Authentication{
+        const accessToken = jwt.sign({ id, firstName, lastName, email }, process.env.AUTH_KEY as string, { expiresIn: '30m' });
         const refreshToken = jwt.sign({ email }, process.env.AUTH_KEY as string, { expiresIn: '7d' });
         
         return { accessToken, refreshToken };
