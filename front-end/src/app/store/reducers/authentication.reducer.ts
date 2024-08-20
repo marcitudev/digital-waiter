@@ -4,21 +4,24 @@ import * as actions from '../actions';
 
 export const authenticationInitialState: AuthenticationState = {
   accessToken: null,
-  refreshToken: null
+  refreshToken: null,
+  authUser: null
 }
 
 const _authenticationReducer = createReducer(authenticationInitialState,
-  on(actions.authenticate, (state, { accessToken, refreshToken }) => (
+  on(actions.authenticate, (state, { accessToken, refreshToken, authUser }) => (
     {
       ...state,
       accessToken: accessToken,
-      refreshToken: refreshToken
+      refreshToken: refreshToken,
+      authUser: authUser
     })
   ),
   on(actions.logout, (state) => ({
       ...state,
       accessToken: null,
-      refreshToken: null
+      refreshToken: null,
+      authUser: null
     })
   )
 );
