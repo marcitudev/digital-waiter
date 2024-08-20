@@ -6,7 +6,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { faLock, faAt } from '@fortawesome/free-solid-svg-icons';
 
 // Services
-import { AuthenticationService } from '../../services/authentication.service';
+import { AuthenticationService } from '../../../services/authentication.service';
 
 @Component({
   selector: 'app-login',
