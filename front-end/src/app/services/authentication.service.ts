@@ -9,10 +9,11 @@ import * as actions from './../store/actions';
 
 // Utils
 import encryptData from '../utils/encrypt.utils';
-import { Observable, tap } from 'rxjs';
+import { Observable, of, tap } from 'rxjs';
 import environment from '../../environments/environment';
 import { Authentication } from '../interfaces/authentication.interface';
 import { AuthUser } from '../interfaces/user.interface';
+import { AuthenticationState } from '../store/states';
 
 @Injectable({
   providedIn: 'root'
@@ -20,11 +21,14 @@ import { AuthUser } from '../interfaces/user.interface';
 export class AuthenticationService {
 
   authURL = `${environment.servicesURL.authentication}`;
+  private _authenticationState: AuthenticationState | null = null;
 
   constructor(
     private readonly http: HttpClient,
     private store: Store<AppState>
-  ) { }
+  ) {
+    this.store.select('authUser').subscribe((state) => this._authenticationState = state);
+  }
 
   authenticate(email: string, password: string): Observable<Authentication> {
     const encryptedAuthData = encryptData({ email, password });
@@ -34,8 +38,40 @@ export class AuthenticationService {
     );
   }
 
+  refreshToken(): Observable<Authentication> {
+    return this.http.post<Authentication>(`${this.authURL}refresh-token`, { refreshToken: this._authenticationState?.accessToken }).pipe(
+      tap((authentication) => this.setStoreState(authentication))
+    );
+  }
+
   logout(): void {
     this.clearStoreTokens();
+  }
+
+  isAuthenticated(): Observable<boolean> {
+    if(!this._authenticationState || !this._authenticationState.accessToken || !this._authenticationState.refreshToken) {
+      this.clearStoreTokens();
+      return of(false);
+    }
+
+    if(this.verifyTokenExpiration(this._authenticationState!.accessToken!)) return of(true);
+    else if(this.verifyTokenExpiration(this._authenticationState!.refreshToken!)) {
+      return of(true);
+    };
+
+    this.clearStoreTokens();
+    return of(false);
+  }
+
+  private verifyTokenExpiration(token: string): boolean {
+    const currentDatetime = new Date().getTime();
+    const decodedToken: any = this.decodeToken(token);
+
+    if(!!decodedToken && !!decodedToken.exp) {
+      return currentDatetime < decodedToken.exp * 1000;
+    };
+
+    return false;
   }
 
   private setStoreState(authentication: Authentication): void {
