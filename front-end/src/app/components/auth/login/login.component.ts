@@ -1,6 +1,7 @@
 // Angular
 import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 // Fontawesome Icons
 import { faLock, faAt } from '@fortawesome/free-solid-svg-icons';
@@ -27,7 +28,8 @@ export class LoginComponent {
 
   constructor(
     private readonly authService: AuthenticationService,
-    private readonly formBuilder: FormBuilder
+    private readonly formBuilder: FormBuilder,
+    private readonly router: Router
   ) { }
 
   login(event: Event): void{
@@ -41,7 +43,10 @@ export class LoginComponent {
 
     if(email && password) {
       this.authService.authenticate(email, password).subscribe({
-        next: () => this.loading = false,
+        next: () => {
+          this.loading = false;
+          this.router.navigate(['/home']);
+        },
         error: () => this.loading = false
       });
     }

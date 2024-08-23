@@ -6,14 +6,14 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/app.reducers';
 import * as actions from './../store/actions';
+import { AuthenticationState } from '../store/states';
 
 // Utils
 import encryptData from '../utils/encrypt.utils';
-import { Observable, of, tap } from 'rxjs';
+import { catchError, map, Observable, of, tap } from 'rxjs';
 import environment from '../../environments/environment';
 import { Authentication } from '../interfaces/authentication.interface';
 import { AuthUser } from '../interfaces/user.interface';
-import { AuthenticationState } from '../store/states';
 
 @Injectable({
   providedIn: 'root'
@@ -39,7 +39,7 @@ export class AuthenticationService {
   }
 
   refreshToken(): Observable<Authentication> {
-    return this.http.post<Authentication>(`${this.authURL}refresh-token`, { refreshToken: this._authenticationState?.accessToken }).pipe(
+    return this.http.post<Authentication>(`${this.authURL}authentication/refresh-token`, { refreshToken: this._authenticationState?.refreshToken }).pipe(
       tap((authentication) => this.setStoreState(authentication))
     );
   }
@@ -56,7 +56,13 @@ export class AuthenticationService {
 
     if(this.verifyTokenExpiration(this._authenticationState!.accessToken!)) return of(true);
     else if(this.verifyTokenExpiration(this._authenticationState!.refreshToken!)) {
-      return of(true);
+      return this.refreshToken().pipe(
+        map(() => true),
+        catchError(() => {
+          this.clearStoreTokens();
+          return of(false);
+        })
+      );
     };
 
     this.clearStoreTokens();
@@ -64,11 +70,11 @@ export class AuthenticationService {
   }
 
   private verifyTokenExpiration(token: string): boolean {
-    const currentDatetime = new Date().getTime();
+    const currentDatetime = (new Date().getTime()) / 1000;
     const decodedToken: any = this.decodeToken(token);
 
     if(!!decodedToken && !!decodedToken.exp) {
-      return currentDatetime < decodedToken.exp * 1000;
+      return currentDatetime < decodedToken.exp;
     };
 
     return false;
