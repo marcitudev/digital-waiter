@@ -1,8 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { canMatchTeam } from './services/auth.guard';
+
+// Components
 import { LoginComponent } from './components/auth/login/login.component';
 import { HomeComponent } from './components/home/home.component';
-import { canMatchTeam } from './services/auth.guard';
 
 const routes: Routes = [
   {
