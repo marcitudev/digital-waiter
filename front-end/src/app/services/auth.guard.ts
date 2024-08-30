@@ -1,7 +1,8 @@
 import { inject } from '@angular/core';
-import { CanMatchFn, Route, UrlSegment } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivateFn, CanMatchFn, Route } from '@angular/router';
 import { AuthGuardService } from './auth-guard.service';
+import { take } from 'rxjs';
 
-export const canMatchTeam: CanMatchFn = (route: Route, segments: UrlSegment[]) => {
-  return inject(AuthGuardService).canMatchTeam();
+export const authGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
+  return inject(AuthGuardService).isAuthenticatedForAccessRoute(route);
 };

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { canMatchTeam } from './services/auth.guard';
+import { authGuard } from './services/auth.guard';
 
 // Components
 import { LoginComponent } from './components/auth/login/login.component';
@@ -14,12 +14,17 @@ const routes: Routes = [
   },
   {
     path: 'login',
-    component: LoginComponent
+    component: LoginComponent,
+    canActivate: [authGuard]
   },
   {
     path: 'home',
     component: HomeComponent,
-    canMatch: [canMatchTeam]
+    canActivate: [authGuard]
+  },
+  {
+    path: '**',
+    redirectTo: 'home'
   }
 ];
 
