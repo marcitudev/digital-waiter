@@ -5,10 +5,12 @@ import { localStorageSync } from 'ngrx-store-localstorage';
 export function localStorageSyncReducer(reducer: ActionReducer<AppState>): ActionReducer<AppState> {
   return (state, action) => {
     if (typeof window !== 'undefined') {
-      return localStorageSync({
+      const newState = localStorageSync({
         keys: ['authUser'],
         rehydrate: true,
       })(reducer)(state, action);
+
+      return { ...newState, hydrated: true };
     } else {
       return reducer(state, action);
     }
