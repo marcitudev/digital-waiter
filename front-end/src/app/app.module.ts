@@ -22,7 +22,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { StoreModule } from '@ngrx/store';
 import { appReducers } from './store/app.reducers';
-import { metaReducers } from './store/local-storage.reducer';
+import { metaReducers } from './store/cookies-storage.reducer';
 
 @NgModule({
   declarations: [
