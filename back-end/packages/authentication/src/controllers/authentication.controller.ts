@@ -52,6 +52,23 @@ route.post('/refresh-token', [
     }
 });
 
+route.post('/is-authenticated', async (req: Request, res: Response) => {
+    try{
+        const authCookies = JSON.parse(req.cookies.authentication ?? '{}');
+        const authenticationStatus = await authenticationService.isAuthenticated(authCookies);
+        const { authenticated, byRefreshToken } = authenticationStatus;
+
+        if(authenticated && byRefreshToken){
+            const authentication = await authenticationService.refresh(authCookies.refreshToken);
+            const [ tokens ] = authentication;
+            res.cookie('authentication', JSON.stringify(tokens), { httpOnly: true });
+        }        
+        return res.status(200).json({ isAuthenticated: authenticated});
+    } catch(error){
+        controllerExceptionHandler(req, res, error);
+    }
+})
+
 export const verifyToken = async (req: AuthenticationRequest, res: Response, next: NextFunction) => {
     try{
         const routeDontNeedAuthentication = routesWithoutAuthentication.some(([ method, path ]) => {
