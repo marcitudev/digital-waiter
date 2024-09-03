@@ -1,6 +1,7 @@
 import express, { Router } from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 
 // controllers
 import userController from './controllers/user.controller';
@@ -18,6 +19,7 @@ const PORT = 3001;
 app.use(cors());
 app.use(route);
 app.use(express.json());
+app.use(cookieParser());
 
 app.use('/authentication', authenticationController);
 app.use('/users', verifyToken, userController);
