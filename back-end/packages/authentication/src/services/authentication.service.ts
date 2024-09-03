@@ -78,7 +78,7 @@ class AuthenticationService{
     }
 
     private generateTokens(id: number, firstName: string, lastName: string, email: string): Authentication{
-        const accessToken = jwt.sign({ id, firstName, lastName, email }, process.env.AUTH_KEY as string, { expiresIn: '30s' });
+        const accessToken = jwt.sign({ id, firstName, lastName, email }, process.env.AUTH_KEY as string, { expiresIn: '30m' });
         const refreshToken = jwt.sign({ email }, process.env.AUTH_KEY as string, { expiresIn: '7d' });
         
         return { accessToken, refreshToken };
