@@ -61,12 +61,12 @@ class UserService{
         return user;
     }
 
-    async getByEmailAndPassword(email: string, password: string){
+    async getByEmailAndPassword(email: string, password: string): Promise<UserDTO | null> {
         const emailObject = new Email(email);
         return await userRepository.getByEmailAndPassword(emailObject.value, password);
     }
 
-    async getByEmail(email: string){
+    async getByEmail(email: string): Promise<UserDTO | null>{
         const emailObject = new Email(email);
         return await userRepository.getByEmail(emailObject.value);
     }
