@@ -1,9 +1,9 @@
 import { createAction, props } from '@ngrx/store';
-import { AuthenticationState } from '../states';
+import { AuthUserState } from '../states';
 
 export const authenticate = createAction(
   '[Auth] Authenticate',
-  props<AuthenticationState>()
+  props<AuthUserState>()
 );
 
 export const logout = createAction('[Auth] Logout');

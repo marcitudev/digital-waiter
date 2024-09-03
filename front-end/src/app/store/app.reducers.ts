@@ -3,7 +3,7 @@ import * as states from './states';
 import * as reducers from './reducers';
 
 export interface AppState {
-  authUser: states.AuthenticationState;
+  authUser: states.AuthUserState;
   hydrated: boolean;
 }
 

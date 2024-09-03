@@ -1,21 +1,16 @@
 import { Action, createReducer, on } from '@ngrx/store';
-import { AuthenticationState } from '../states';
+import { AuthUserState } from '../states';
 import * as actions from '../actions';
 
-export const authenticationInitialState: AuthenticationState = {
-  accessToken: null,
-  refreshToken: null,
-  authUser: null
+export const authenticationInitialState: AuthUserState = {
+  id: null,
+  firstName: null,
+  lastName: null,
+  email: null
 }
 
 const _authenticationReducer = createReducer(authenticationInitialState,
-  on(actions.authenticate, (state, { accessToken, refreshToken, authUser }) => (
-    {
-      ...state,
-      accessToken: accessToken,
-      refreshToken: refreshToken,
-      authUser: authUser
-    })
+  on(actions.authenticate, (state, authUser) => ({ ...authUser })
   ),
   on(actions.logout, (state) => ({
       ...state,
@@ -26,6 +21,6 @@ const _authenticationReducer = createReducer(authenticationInitialState,
   )
 );
 
-export function authenticationReducer(state: AuthenticationState | undefined, action: Action): AuthenticationState {
+export function authenticationReducer(state: AuthUserState | undefined, action: Action): AuthUserState {
   return _authenticationReducer(state ?? authenticationInitialState, action);
 }
