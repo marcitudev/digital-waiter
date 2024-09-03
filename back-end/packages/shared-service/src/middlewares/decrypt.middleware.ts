@@ -14,6 +14,7 @@ const decrypt = (req: Request, res: Response, next: NextFunction) => {
             const { data } = req.body;
             req.body = decryptData(data);
         } catch(error) {
+            if(process.env.PRODUCTION === 'false') return next();
             return controllerExceptionHandler(req, res, error);
         }
     }
