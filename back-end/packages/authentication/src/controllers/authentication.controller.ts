@@ -3,7 +3,7 @@ import { ErrorEnum, validationResultHandler, controllerExceptionHandler, Authent
 
 import * as express from 'express';
 import { Request, Response, NextFunction } from 'express';
-import { body } from 'express-validator';
+import { body, cookie } from 'express-validator';
 import authenticationService from '../services/authentication.service';
 
 const route = express.Router();
@@ -24,23 +24,29 @@ route.post('', decrypt, [
 
         const { email, password } = req.body;
         const authentication = await authenticationService.authenticate(email, password);
+        const [ tokens, user ] = authentication;
 
-        return res.status(200).json(authentication);
+        res.cookie('authentication', JSON.stringify(tokens), { httpOnly: true });
+        return res.status(200).json(user);
     } catch(error){
         controllerExceptionHandler(req, res, error);
     }
 });
 
 route.post('/refresh-token', [
-    body('refreshToken').notEmpty().withMessage(ErrorEnum.REFRESH_TOKEN_IS_REQUIRED)
+    cookie('authentication').notEmpty().withMessage(ErrorEnum.REFRESH_TOKEN_IS_REQUIRED)
 ], async (req: Request, res: Response) => {
     try{
         validationResultHandler(req);
 
-        const { refreshToken } = req.body;
+        const authCookies = JSON.parse(req.cookies.authentication);
+        const { refreshToken } = authCookies;
+
         const authentication = await authenticationService.refresh(refreshToken);
+        const [ tokens, user ] = authentication;
         
-        return res.status(200).json(authentication);
+        res.cookie('authentication', JSON.stringify(tokens), { httpOnly: true });
+        return res.status(200).json(user);
     } catch(error){
         controllerExceptionHandler(req, res, error);
     }
@@ -53,8 +59,9 @@ export const verifyToken = async (req: AuthenticationRequest, res: Response, nex
         });
         if(routeDontNeedAuthentication) return next();
     
-        const { authorization } = req.headers;
-        const user = await authenticationService.validateRequest(authorization ?? '');
+        const authCookies = JSON.parse(req.cookies.authentication);
+        const { accessToken } = authCookies;
+        const user = await authenticationService.validateRequest(accessToken ?? '');
 
         req.user = user;
     

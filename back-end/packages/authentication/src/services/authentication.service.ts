@@ -1,5 +1,5 @@
 // import from shared-service
-import { AuthUser, Authentication, ErrorEnum, StatusCode, ValidationException } from 'shared-service';
+import { AuthUser, Authentication, ErrorEnum, StatusCode, UserDTO, ValidationException } from 'shared-service';
 
 import { promisify } from 'util';
 import userService from './user.service';
@@ -13,15 +13,17 @@ class AuthenticationService{
         this.verifyAsync = promisify(jwt.verify);
     }
 
-    async authenticate(email: string, password: string): Promise<Authentication>{
+    async authenticate(email: string, password: string): Promise<[Authentication, UserDTO]>{
         const user = await userService.getByEmailAndPassword(email, password);
         if(!user) throw new ValidationException(StatusCode.UNAUTHORIZED, ErrorEnum.UNAUTHORIZED, 'User unauthorized');
         
         const { id, firstName, lastName } = user;
-        return this.generateToken(id, firstName, lastName, email);
+
+        const tokens = this.generateTokens(id, firstName, lastName, email);
+        return [tokens, user];
     }
 
-    async refresh(refreshToken: string): Promise<Authentication | void>{
+    async refresh(refreshToken: string): Promise<[Authentication, UserDTO]>{
         const decoded = await this.verifyToken(refreshToken);
         const user = await userService.getByEmail(decoded.email);
 
@@ -29,11 +31,13 @@ class AuthenticationService{
             throw new ValidationException(StatusCode.UNAUTHORIZED, ErrorEnum.UNAUTHORIZED, 'User unauthorized');
 
         const { id, firstName, lastName, email } = user;
-        return this.generateToken(id, firstName, lastName, email);
+
+        const tokens = this.generateTokens(id, firstName, lastName, email);
+        return [tokens, user];
     }
 
     async validateRequest(token: string): Promise<AuthUser>{
-        if(!token) throw new ValidationException(StatusCode.UNAUTHORIZED, ErrorEnum.UNAUTHORIZED, 'Authorization header is required');
+        if(!token) throw new ValidationException(StatusCode.UNAUTHORIZED, ErrorEnum.UNAUTHORIZED, 'Authorization is required');
 
         const decoded = await this.verifyToken(token);
         if(!decoded.id) throw new ValidationException(StatusCode.UNAUTHORIZED, ErrorEnum.UNAUTHORIZED, 'User unauthorized');
@@ -58,7 +62,7 @@ class AuthenticationService{
         }
     }
 
-    private generateToken(id: number, firstName: string, lastName: string, email: string): Authentication{
+    private generateTokens(id: number, firstName: string, lastName: string, email: string): Authentication{
         const accessToken = jwt.sign({ id, firstName, lastName, email }, process.env.AUTH_KEY as string, { expiresIn: '30m' });
         const refreshToken = jwt.sign({ email }, process.env.AUTH_KEY as string, { expiresIn: '7d' });
         
