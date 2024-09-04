@@ -6,7 +6,6 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/app.reducers';
 import * as actions from './../store/actions';
-import { AuthUserState } from '../store/states';
 
 // Interfaces
 import { AuthenticationStatus } from '../interfaces/authentication.status.interface';
@@ -54,8 +53,10 @@ export class AuthenticationService {
     );
   }
 
-  logout(): void {
-    this.clearStoreTokens();
+  logout(): Observable<void> {
+    return this.http.post<void>(`${this.authURL}authentication/revoke-authentication`, {}, { withCredentials: true }).pipe(
+      tap(() => this.clearStoreTokens())
+    );
   }
 
   private setStoreState(authUser: AuthUser): void {
