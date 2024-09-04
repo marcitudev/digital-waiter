@@ -11,7 +11,7 @@ const route = express.Router();
 type keyValueTuple = [string, string];
 const routesWithoutAuthentication: Array<keyValueTuple> = [
     ['POST', '/users']
-]
+];
 
 route.post('', decrypt, [
     body('email').notEmpty().withMessage(ErrorEnum.EMAIL_IS_REQUIRED)
@@ -52,6 +52,19 @@ route.post('/refresh-token', [
     }
 });
 
+route.post('/revoke-authentication', [
+    cookie('authentication').notEmpty().withMessage(ErrorEnum.AUTHENTICATION_TOKENS_IS_REQUIRED)
+], async (req: Request, res: Response) => {
+    try{
+        validationResultHandler(req);
+        
+        res.clearCookie('authentication', { httpOnly: true });
+        return res.status(204).end();
+    } catch(error){
+        controllerExceptionHandler(req, res, error);
+    }
+});
+
 route.post('/is-authenticated', async (req: Request, res: Response) => {
     try{
         const authCookies = JSON.parse(req.cookies.authentication ?? '{}');
@@ -67,7 +80,7 @@ route.post('/is-authenticated', async (req: Request, res: Response) => {
     } catch(error){
         controllerExceptionHandler(req, res, error);
     }
-})
+});
 
 export const verifyToken = async (req: AuthenticationRequest, res: Response, next: NextFunction) => {
     try{
