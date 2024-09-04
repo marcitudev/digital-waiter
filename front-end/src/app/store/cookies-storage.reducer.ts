@@ -8,7 +8,7 @@ export function cookieSyncReducer(reducer: ActionReducer<AppState>): ActionReduc
       let newState = reducer(state, action);
 
       const { id, firstName, lastName, email } = newState.authUser;
-      if(id || firstName || lastName || email) {
+      if((id || firstName || lastName || email) || action.type === '[Auth] Logout') {
         Cookies.set('authUser', JSON.stringify(newState.authUser), { expires: 7 });
       }
 
