@@ -10,13 +10,14 @@ export const authenticationInitialState: AuthUserState = {
 }
 
 const _authenticationReducer = createReducer(authenticationInitialState,
-  on(actions.authenticate, (state, authUser) => ({ ...authUser })
+  on(actions.authenticate, (state, { type, ...authUser }) => ({ ...state, ...authUser })
   ),
   on(actions.logout, (state) => ({
       ...state,
-      accessToken: null,
-      refreshToken: null,
-      authUser: null
+      id: null,
+      firstName: null,
+      lastName: null,
+      email: null
     })
   )
 );
