@@ -12,6 +12,7 @@ type keyValueTuple = [string, string];
 const routesWithoutAuthentication: Array<keyValueTuple> = [
     ['POST', '/users']
 ];
+const expiresCookiesDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 
 route.post('', decrypt, [
     body('email').notEmpty().withMessage(ErrorEnum.EMAIL_IS_REQUIRED)
@@ -26,7 +27,7 @@ route.post('', decrypt, [
         const authentication = await authenticationService.authenticate(email, password);
         const [ tokens, user ] = authentication;
 
-        res.cookie('authentication', JSON.stringify(tokens), { httpOnly: true });
+        res.cookie('authentication', JSON.stringify(tokens), { expires: expiresCookiesDate, httpOnly: true });
         return res.status(200).json(user);
     } catch(error){
         controllerExceptionHandler(req, res, error);
@@ -45,7 +46,7 @@ route.post('/refresh-token', [
         const authentication = await authenticationService.refresh(refreshToken);
         const [ tokens, user ] = authentication;
         
-        res.cookie('authentication', JSON.stringify(tokens), { httpOnly: true });
+        res.cookie('authentication', JSON.stringify(tokens), { expires: expiresCookiesDate, httpOnly: true });
         return res.status(200).json(user);
     } catch(error){
         controllerExceptionHandler(req, res, error);
